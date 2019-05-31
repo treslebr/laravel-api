@@ -8,13 +8,17 @@ use Illuminate\Support\Facades\Route;
 
 class ProductServiceProvider extends ServiceProvider
 {
+    const MODULE = "Product";
+
     /**
      * Utilizado quando a aplicacao eh iniciada
      */
     public function boot()
     {
-        Route::namespace("Modules\Core\Product\Http\Controllers")
+        Route::namespace("Modules\Core\\".self::MODULE."\Http\Controllers")
             ->group(__DIR__."/../Routes/web.php");
+
+        $this->loadMigrationsFrom(__DIR__."/../Migrations");
     }
 
     /**
