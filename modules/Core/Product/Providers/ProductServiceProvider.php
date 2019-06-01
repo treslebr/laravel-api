@@ -16,6 +16,7 @@ class ProductServiceProvider extends ServiceProvider
     public function boot()
     {
         Route::namespace("Modules\Core\\".self::MODULE."\Http\Controllers")
+            ->middleware(["web"])
             ->group(__DIR__."/../Routes/web.php");
 
         $this->loadMigrationsFrom(__DIR__."/../Migrations");
