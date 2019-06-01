@@ -20,6 +20,15 @@ class ProductServiceProvider extends ServiceProvider
             ->group(__DIR__."/../Routes/web.php");
 
         $this->loadMigrationsFrom(__DIR__."/../Migrations");
+
+        /**
+         * Para utilizar na view:
+         *
+         * NOME_MODULO::NOME_ARQUIVO_TRADUCAO.CHAVE_ARRAY
+         * {{Product::category.title}}
+         *
+         */
+        $this->loadTranslationsFrom(__DIR__."/../lang", self::MODULE);
     }
 
     /**
