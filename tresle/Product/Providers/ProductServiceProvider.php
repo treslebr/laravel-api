@@ -16,8 +16,8 @@ class ProductServiceProvider extends ServiceProvider
     public function boot()
     {
         Route::namespace("Tresle\\".self::MODULE."\Http\Controllers")
-            ->middleware(["web"])
-            ->group(__DIR__."/../Routes/web.php");
+            ->middleware(["api"])
+            ->group(__DIR__."/../Routes/api.php");
 
         $this->loadMigrationsFrom(__DIR__."/../Migrations");
 
