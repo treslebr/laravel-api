@@ -10,4 +10,9 @@ class Categories extends Model
      * @var array 
      */
     protected $fillable = ["name", "status"];
+
+    /**
+     * @var string
+     */
+    protected $table = "product_categories";
 }
