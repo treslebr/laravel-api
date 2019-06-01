@@ -165,7 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Modules\Core\Product\Providers\ProductServiceProvider::class,
+        Tresle\Product\Providers\ProductServiceProvider::class,
 
         /*
          * Application Service Providers...

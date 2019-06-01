@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Product\Providers;
+namespace Tresle\Product\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +15,7 @@ class ProductServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Route::namespace("Modules\Core\\".self::MODULE."\Http\Controllers")
+        Route::namespace("Tresle\\".self::MODULE."\Http\Controllers")
             ->middleware(["web"])
             ->group(__DIR__."/../Routes/web.php");
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Product\Http\Controllers;
+namespace Tresle\Product\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 

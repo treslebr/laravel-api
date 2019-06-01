@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Product\Model;
+namespace Tresle\Product\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
