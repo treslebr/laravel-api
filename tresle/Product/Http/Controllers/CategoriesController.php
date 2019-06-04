@@ -20,6 +20,7 @@ class CategoriesController extends Controller
 
     /**
      * @param Request $request
+     * @return mixed
      */
     public function store(Request $request)
     {
@@ -49,13 +50,14 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Categories $category
+     * @return Categories
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(\Illuminate\Http\Request $request, Categories $category)
     {
-        //
+        $category->delete();
+        return $category;
     }
 }
