@@ -37,15 +37,15 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Categories $category
+     * @return Categories
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Categories $category)
     {
-        //
+        $data = $request->all();
+        $category->update($data);
+        return $category;
     }
 
     /**
