@@ -4,6 +4,7 @@ namespace Tresle\Product\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Tresle\Product\Model\Categories;
+use Tresle\Product\Http\Requests\ProductCategoriesRequest as Request;
 
 class CategoriesController extends Controller
 {
@@ -16,15 +17,14 @@ class CategoriesController extends Controller
         return Categories::all();
     }
 
+
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        return Categories::create($data);
     }
 
     /**
