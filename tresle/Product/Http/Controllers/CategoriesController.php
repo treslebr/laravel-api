@@ -59,4 +59,17 @@ class CategoriesController extends Controller
         $category->delete();
         return $category;
     }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function search(string $name)
+    {
+        $result = Categories::where("name", "like", "%$name%")
+            ->orderBy('name', 'ASC')
+            ->where("status", true)->get()->toJson();
+
+        return $result;
+    }
 }
