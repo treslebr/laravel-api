@@ -17,7 +17,6 @@ class CategoriesController extends Controller
         return Categories::all();
     }
 
-
     /**
      * @param Request $request
      * @return mixed
@@ -42,7 +41,7 @@ class CategoriesController extends Controller
      * @param Categories $category
      * @return Categories
      */
-    public function update(Request $request, Categories $category)
+    public function update(\Illuminate\Http\Request $request, Categories $category)
     {
         $data = $request->all();
         $category->update($data);
@@ -50,7 +49,7 @@ class CategoriesController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @param Categories $category
      * @return Categories
      * @throws \Exception
