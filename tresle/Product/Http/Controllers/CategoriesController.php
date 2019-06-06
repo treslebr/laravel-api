@@ -3,6 +3,7 @@
 namespace Tresle\Product\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tresle\Product\Model\Categories;
 use Tresle\Product\Http\Requests\ProductCategoriesRequest as Request;
 
@@ -28,36 +29,51 @@ class CategoriesController extends Controller
     }
 
     /**
-     * @param Categories $category
-     * @return Categories
+     * @param $id
+     * @return array
      */
-    public function show(Categories $category)
+    public function show($id)
     {
-        return $category;
-    }
-
-    /**
-     * @param Request $request
-     * @param Categories $category
-     * @return Categories
-     */
-    public function update(\Illuminate\Http\Request $request, Categories $category)
-    {
-        $data = $request->all();
-        $category->update($data);
-        return $category;
+        try {
+            $category = Categories::findOrFail((int)$id);
+            return ["error" => false, "message" => "", "data" => $category];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Categoria não encontrada"];
+        }
     }
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param Categories $category
-     * @return Categories
+     * @param $id
+     * @return array
+     */
+    public function update(\Illuminate\Http\Request $request, $id)
+    {
+        try {
+            $category = Categories::findOrFail((int)$id);
+            $data = $request->all();
+            $category->update($data);
+            return ["error" => false, "message" => ""];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Categoria não encontrada"];
+        }
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return array
      * @throws \Exception
      */
-    public function destroy(\Illuminate\Http\Request $request, Categories $category)
+    public function destroy(\Illuminate\Http\Request $request, $id)
     {
-        $category->delete();
-        return $category;
+        try {
+            $category = Categories::findOrFail((int)$id);
+            $category->delete();
+            return ["error" => false, "message" => ""];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Categoria não encontrada"];
+        }
     }
 
     /**
