@@ -1,13 +1,13 @@
 <?php
 
-namespace Tresle\Product\Http\Controllers;
+namespace Tresle\Product\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tresle\Product\Model\Categories;
 use Tresle\Product\Http\Requests\ProductCategoriesRequest as Request;
 
-class CategoriesController extends Controller
+class CategoryController extends Controller
 {
 
     /**

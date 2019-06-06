@@ -1,5 +1,9 @@
 <?php
-Route::prefix("api/v1/products")->group(function() {
-    Route::resource("/categories", "CategoriesController");
-    Route::get("/categories/q/{name}", "CategoriesController@search");
+
+/**
+ * Categoria de produtos
+ */
+Route::prefix("api/v1/product/category")->group(function() {
+    Route::resource("/", "Product\CategoryController");
+    Route::get("/q/{name}", "Product\CategoryController@search");
 });
