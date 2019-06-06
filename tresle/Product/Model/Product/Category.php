@@ -1,10 +1,10 @@
 <?php
 
-namespace Tresle\Product\Model;
+namespace Tresle\Product\Model\Product;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Categories extends Model
+class Category extends Model
 {
     /**
      * @var array 
