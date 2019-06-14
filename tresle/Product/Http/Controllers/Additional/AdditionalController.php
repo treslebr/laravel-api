@@ -4,18 +4,18 @@ namespace Tresle\Product\Http\Controllers\Additional;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Tresle\Product\Model\Additional\Category;
+use Tresle\Product\Model\Additional\Additional;
 use Tresle\Product\Http\Requests\ProductCategoriesRequest as Request;
 
-class CategoryController extends Controller
+class AdditionalController extends Controller
 {
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|Category[]
+     * @return \Illuminate\Database\Eloquent\Collection|Additional[]
      */
     public function index()
     {
-        return Category::all()->with("additionals")->get();;
+        return Additional::with("category")->get();
     }
 
     /**
@@ -25,7 +25,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        return Category::create($data);
+        return Additional::create($data);
     }
 
     /**
@@ -35,12 +35,15 @@ class CategoryController extends Controller
     public function show($id)
     {
         try {
-            $category = Category::findOrFail((int)$id)->with("additionals")->get();
+            $additional = Additional::findOrFail((int)$id)->with("category")->get();
 
             return [
                 "error" => false,
                 "message" => "",
-                "data" => $category
+                "data" => [
+                    $additional
+                ],
+
             ];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Categoria não encontrada"];
@@ -55,9 +58,9 @@ class CategoryController extends Controller
     public function update(\Illuminate\Http\Request $request, $id)
     {
         try {
-            $category = Category::findOrFail((int)$id);
+            $additional = Additional::findOrFail((int)$id);
             $data = $request->all();
-            $category->update($data);
+            $additional->update($data);
             return ["error" => false, "message" => ""];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Categoria não encontrada"];
@@ -73,8 +76,8 @@ class CategoryController extends Controller
     public function destroy(\Illuminate\Http\Request $request, $id)
     {
         try {
-            $category = Category::findOrFail((int)$id);
-            $category->delete();
+            $additional = Additional::findOrFail((int)$id);
+            $additional->delete();
             return ["error" => false, "message" => ""];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Categoria não encontrada"];
@@ -87,9 +90,10 @@ class CategoryController extends Controller
      */
     public function search(string $name)
     {
-        $result = Category::where("name", "like", "%$name%")
+        $result = Additional::where("name", "like", "%$name%")
             ->orderBy('name', 'ASC')
-            ->where("status", true)->get()->toJson();
+            ->with("category")
+            ->where("status", true)->get();
 
         return $result;
     }

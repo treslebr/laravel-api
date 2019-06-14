@@ -15,3 +15,11 @@ Route::prefix("api/v1/product/additional/")->group(function() {
     Route::resource("category", "Additional\CategoryController");
     Route::get("category/q/{name}", "Additional\CategoryController@search");
 });
+
+/**
+ * Produtos adicionais
+ */
+Route::prefix("api/v1/product/")->group(function() {
+    Route::resource("additional", "Additional\AdditionalController");
+    Route::get("additional/q/{name}", "Additional\AdditionalController@search");
+});
