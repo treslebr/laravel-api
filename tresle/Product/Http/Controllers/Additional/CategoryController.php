@@ -9,6 +9,7 @@ use Tresle\Product\Http\Requests\ProductCategoriesRequest as Request;
 
 class CategoryController extends Controller
 {
+    const NAO_ENCONTRADO = "Categoria não encontrada";
 
     /**
      * @return \Illuminate\Database\Eloquent\Collection|Category[]
@@ -43,7 +44,7 @@ class CategoryController extends Controller
                 "data" => $category
             ];
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Categoria não encontrada"];
+            return ["error" => true, "message" => self::NAO_ENCONTRADO];
         }
     }
 
@@ -60,7 +61,7 @@ class CategoryController extends Controller
             $category->update($data);
             return ["error" => false, "message" => ""];
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Categoria não encontrada"];
+            return ["error" => true, "message" => self::NAO_ENCONTRADO];
         }
     }
 
@@ -77,7 +78,7 @@ class CategoryController extends Controller
             $category->delete();
             return ["error" => false, "message" => ""];
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Categoria não encontrada"];
+            return ["error" => true, "message" => self::NAO_ENCONTRADO];
         }
     }
 
