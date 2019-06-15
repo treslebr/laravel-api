@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Category::all()->with("additionals")->get();;
+        return Category::with("additionals")->get();
     }
 
     /**
