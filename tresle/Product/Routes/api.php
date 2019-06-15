@@ -23,3 +23,11 @@ Route::prefix("api/v1/product/")->group(function() {
     Route::resource("additional", "Additional\AdditionalController");
     Route::get("additional/q/{name}", "Additional\AdditionalController@search");
 });
+
+/**
+ * Produtos
+ */
+Route::prefix("api/v1/")->group(function() {
+    Route::resource("product", "Product\ProductController");
+    Route::get("product/q/{name}", "Product\ProductController@search");
+});
