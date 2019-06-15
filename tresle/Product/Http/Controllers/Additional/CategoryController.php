@@ -35,7 +35,7 @@ class CategoryController extends Controller
     public function show($id)
     {
         try {
-            $category = Category::findOrFail((int)$id)->with("additionals")->get();
+            $category = Category::with("additionals")->findOrFail((int)$id);
 
             return [
                 "error" => false,

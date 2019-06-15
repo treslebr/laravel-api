@@ -35,7 +35,7 @@ class AdditionalController extends Controller
     public function show($id)
     {
         try {
-            $additional = Additional::findOrFail((int)$id)->with("category")->get();
+            $additional = Additional::with("category")->findOrFail($id);
 
             return [
                 "error" => false,
