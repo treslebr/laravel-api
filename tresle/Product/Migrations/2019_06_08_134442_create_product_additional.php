@@ -17,7 +17,7 @@ class CreateProductAdditional extends Migration
             $table->bigIncrements('id');
             $table->string("name");
             $table->boolean("status")->default(true);
-            $table->float("price");
+            $table->float("price")->default(0);
             $table->bigInteger("product_additional_category_id")->unsigned();
             $table->foreign("product_additional_category_id")->references('id')->on("product_additional_category");
             $table->timestamps();
