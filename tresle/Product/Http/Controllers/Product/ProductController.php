@@ -20,7 +20,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|Category[]
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Product[]
      */
     public function index()
     {
