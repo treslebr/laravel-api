@@ -16,7 +16,7 @@ class AdditionalController extends Controller
      */
     public function index()
     {
-        return Additional::with("category")->get();
+        return Additional::with(["category", "products"])->get();
     }
 
     /**
@@ -36,7 +36,7 @@ class AdditionalController extends Controller
     public function show($id)
     {
         try {
-            $additional = Additional::with("category")->findOrFail($id);
+            $additional = Additional::with(["category", "products"])->findOrFail($id);
 
             return [
                 "error" => false,
