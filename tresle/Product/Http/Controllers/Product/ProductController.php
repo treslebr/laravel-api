@@ -18,4 +18,13 @@ class ProductController extends Controller
 //        $data = $request->all();
 //        return Product::create($data);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|Category[]
+     */
+    public function index()
+    {
+        $products = Product::with("additionals")->get();
+        return $products;
+    }
 }
