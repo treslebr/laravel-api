@@ -15,4 +15,13 @@ class Product extends Model
      * @var string
      */
     protected $table = "product";
+
+    public function additionals(){
+        return $this->belongsToMany(
+            "Tresle\Product\Model\Additional\Additional",
+            "product_additional_relation",
+            "product_id",
+            "product_additional_id"
+        );
+    }
 }
