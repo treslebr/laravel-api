@@ -24,4 +24,15 @@ class Product extends Model
             "product_additional_id"
         );
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo(
+            "Tresle\Product\Model\Product\Category",
+            "product_category_id"
+        );
+    }
 }

@@ -28,10 +28,10 @@ class ProductController extends Controller
         $idProduct  = (int)$idProduct;
         try {
             /** @var \Tresle\Product\Model\Product\Product $product */
-            $product  = Product::with("additionals")->findOrFail($idProduct);
+            $product  = $this->getProductsWith()->findOrFail($idProduct);
             $product->additionals()->detach($request->input("additionalsId"));
 
-            return ["error" => false, "message" => "", "data" => Product::with("additionals")->findOrFail($idProduct)];
+            return ["error" => false, "message" => "", "data" => $this->getProductsWith()->findOrFail($idProduct)];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Produto não encontrado"];
         }catch (\Illuminate\Database\QueryException $e) {
@@ -50,13 +50,13 @@ class ProductController extends Controller
         $idProduct  = (int)$idProduct;
         try {
             /** @var \Tresle\Product\Model\Product\Product $product */
-            $product        = Product::with("additionals")->findOrFail($idProduct);
+            $product        = $this->getProductsWith()->findOrFail($idProduct);
             $additionals    = $product->additionals()->select(["product_additional_id"])->get()->toArray();
             $additionalsId  = $this->filterAdditionalsId($additionals, $request->input("additionalsId"));
 
             $product->additionals()->attach($additionalsId);
 
-            return ["error" => false, "message" => "", "data" => Product::with("additionals")->findOrFail($idProduct)];
+            return ["error" => false, "message" => "", "data" => $this->getProductsWith()->findOrFail($idProduct)];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Produto não encontrado"];
         }catch (\Illuminate\Database\QueryException $e) {
@@ -71,7 +71,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with("additionals")->get();
+        $products = $this->getProductsWith()->get();
         return $products;
     }
 
@@ -82,7 +82,7 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
-            $product = Product::with("additionals")->findOrFail($id);
+            $product = $this->getProductsWith()->findOrFail($id);
 
             return [
                 "error" => false,
@@ -113,5 +113,12 @@ class ProductController extends Controller
             }
         }
         return $auxAdditionalsId;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder|Product
+     */
+    private function getProductsWith($array = ["additionals", "category"]){
+        return Product::with($array);
     }
 }
