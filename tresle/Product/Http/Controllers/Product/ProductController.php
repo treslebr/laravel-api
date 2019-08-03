@@ -9,6 +9,8 @@ use Tresle\Product\Model\Product\Product;
 
 class ProductController extends Controller
 {
+    private $with = ["additionals", "category"];
+
     /**
      * @param Request $request
      * @return mixed
@@ -115,6 +117,20 @@ class ProductController extends Controller
     }
 
     /**
+     * @param string $name
+     * @return mixed
+     */
+    public function search(string $name)
+    {
+        $result = Product::where("name", "like", "%$name%")
+            ->orderBy('name', 'ASC')
+            ->with($this->with)
+            ->where("status", true)->get();
+
+        return $result;
+    }
+
+    /**
      * Retirando os adicionais que já estão relacionados ao produto;
      *
      * @param array $additionals
@@ -135,7 +151,8 @@ class ProductController extends Controller
     /**
      * @return \Illuminate\Database\Eloquent\Builder|Product
      */
-    private function getProductsWith($array = ["additionals", "category"]){
+    private function getProductsWith($array = []){
+        $array = !$array ? $this->with : $array;
         return Product::with($array);
     }
 }
