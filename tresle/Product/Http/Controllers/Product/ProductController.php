@@ -20,6 +20,23 @@ class ProductController extends Controller
     }
 
     /**
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return array
+     * @throws \Exception
+     */
+    public function destroy(\Illuminate\Http\Request $request, $id)
+    {
+        try {
+            $product = Product::findOrFail((int)$id);
+            $product->delete();
+            return ["error" => false, "message" => ""];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Produto não encontrado"];
+        }
+    }
+
+    /**
      * @param Request $request
      * @param $idProduct
      * @return array
