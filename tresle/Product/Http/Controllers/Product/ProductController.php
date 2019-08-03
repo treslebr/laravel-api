@@ -21,6 +21,28 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
+     * @param $idProduct
+     * @return array
+     */
+    public function removeAdditionalProductById(Request $request, $idProduct){
+        $idProduct  = (int)$idProduct;
+        try {
+            /** @var \Tresle\Product\Model\Product\Product $product */
+            $product  = Product::with("additionals")->findOrFail($idProduct);
+            $product->additionals()->detach($request->input("additionalsId"));
+
+            return ["error" => false, "message" => "", "data" => Product::with("additionals")->findOrFail($idProduct)];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Produto não encontrado"];
+        }catch (\Illuminate\Database\QueryException $e) {
+            $mensagem = "Erro ao remover o produto adicional";
+            $message = strpos($e->getMessage(), "a foreign key constraint fails") ? "{$mensagem}: Adicional não encontrado" : $mensagem;
+            return ["error" => true, "message" => $message];
+        }
+    }
+
+    /**
+     * @param Request $request
      * @param int $idProduct
      * @return mixed
      */
