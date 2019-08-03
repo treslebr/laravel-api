@@ -13,7 +13,7 @@ class ProductController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function store(Request $request)
+    public function store(\Tresle\Product\Http\Requests\Product\ProductRequest $request)
     {
         $data = $request->all();
         return Product::create($data);
