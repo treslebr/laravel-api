@@ -15,8 +15,8 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-//        $data = $request->all();
-//        return Product::create($data);
+        $data = $request->all();
+        return Product::create($data);
     }
 
     /**
@@ -26,5 +26,22 @@ class ProductController extends Controller
     {
         $products = Product::with("additionals")->get();
         return $products;
+    }
+
+    /**
+     * Retirando os adicionais que já estão relacionados ao produto;
+     *
+     * @param array $additionals
+     * @param array $additionalsId
+     * @return array
+     */
+    private function filterAdditionalsId($additionals, $additionalsId){
+        $auxAdditionalsId = [];
+        foreach ($additionalsId as $id){
+            if(!in_array($id, array_column($additionals, "product_additional_id"))){
+                $auxAdditionalsId[] = $id;
+            }
+        }
+        return $auxAdditionalsId;
     }
 }
