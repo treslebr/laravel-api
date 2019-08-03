@@ -31,5 +31,6 @@ Route::prefix("api/{$version}/product/")->group(function() {
  */
 Route::prefix("api/{$version}/")->group(function() {
     Route::resource("product", "Product\ProductController");
+    Route::post("product/{idProduct}/additional", "Product\ProductController@addAdditionalInProductById");
     Route::get("product/q/{name}", "Product\ProductController@search");
 });
