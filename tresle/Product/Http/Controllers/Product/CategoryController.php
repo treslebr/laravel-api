@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Category::all();
+        return $this->getCategoryWith()->get();
     }
 
     /**
@@ -35,7 +35,7 @@ class CategoryController extends Controller
     public function show($id)
     {
         try {
-            $category = Category::findOrFail((int)$id);
+            $category = $this->getCategoryWith()->findOrFail((int)$id);
             return ["error" => false, "message" => "", "data" => $category];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Categoria não encontrada"];
@@ -50,7 +50,7 @@ class CategoryController extends Controller
     public function update(\Illuminate\Http\Request $request, $id)
     {
         try {
-            $category = Category::findOrFail((int)$id);
+            $category = $this->getCategoryWith()->findOrFail((int)$id);
             $data = $request->all();
             $category->update($data);
             return ["error" => false, "message" => ""];
@@ -82,10 +82,17 @@ class CategoryController extends Controller
      */
     public function search(string $name)
     {
-        $result = Category::where("name", "like", "%$name%")
+        $result = $this->getCategoryWith()->where("name", "like", "%$name%")
             ->orderBy('name', 'ASC')
             ->where("status", true)->get()->toJson();
 
         return $result;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder|Product
+     */
+    private function getCategoryWith($array = ["products"]){
+        return Category::with($array);
     }
 }
