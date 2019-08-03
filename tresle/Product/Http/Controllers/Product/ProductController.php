@@ -84,6 +84,7 @@ class ProductController extends Controller
      */
     private function filterAdditionalsId($additionals, $additionalsId){
         $auxAdditionalsId = [];
+        $additionalsId = !is_array($additionalsId) ? (array)$additionalsId : $additionalsId;
         foreach ($additionalsId as $id){
             if(!in_array($id, array_column($additionals, "product_additional_id"))){
                 $auxAdditionalsId[] = $id;
