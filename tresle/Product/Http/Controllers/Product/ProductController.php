@@ -34,7 +34,7 @@ class ProductController extends Controller
 
             $product->additionals()->attach($additionalsId);
 
-            return ["error" => false, "message" => "", "data" => $product];
+            return ["error" => false, "message" => "", "data" => Product::with("additionals")->findOrFail($idProduct)];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Produto não encontrado"];
         }catch (\Illuminate\Database\QueryException $e) {
