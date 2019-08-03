@@ -76,6 +76,28 @@ class ProductController extends Controller
     }
 
     /**
+     * @param $id
+     * @return array
+     */
+    public function show($id)
+    {
+        try {
+            $product = Product::with("additionals")->findOrFail($id);
+
+            return [
+                "error" => false,
+                "message" => "",
+                "data" => [
+                    $product
+                ],
+
+            ];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Produto não encontrado"];
+        }
+    }
+
+    /**
      * Retirando os adicionais que já estão relacionados ao produto;
      *
      * @param array $additionals
