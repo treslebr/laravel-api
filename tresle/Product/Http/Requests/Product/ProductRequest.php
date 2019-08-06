@@ -34,7 +34,7 @@ class ProductRequest extends FormRequest
                 $rules["name"]    .= "|unique:product";
                 break;
             case "PUT": // ATUALIZAÇÃO DE UM REGISTRO EXISTENTE
-                $rules["name"]    .= "|unique:product,name,".$this->id;
+                $rules["name"]    .= "|unique:product,name,".$this->product;
                 break;
             default:break;
         }

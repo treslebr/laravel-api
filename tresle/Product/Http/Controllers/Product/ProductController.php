@@ -131,6 +131,27 @@ class ProductController extends Controller
     }
 
     /**
+     * @param \Tresle\Product\Http\Requests\Product\ProductRequest $request
+     * @param $id
+     * @return array
+     */
+    public function update(\Tresle\Product\Http\Requests\Product\ProductRequest $request, $id)
+    {
+        try {
+            $product = $this->getProductsWith()->findOrFail((int)$id);
+            $data = $request->all();
+            $product->update($data);
+            return ["error" => false, "message" => "", "data" => $product];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Produto não encontrado"];
+        }catch (\Illuminate\Database\QueryException $e) {
+            $mensagem = "Erro ao atualizar o produto";
+            $message = strpos($e->getMessage(), "a foreign key constraint fails") ? "{$mensagem}: Categoria não encontrada" : $mensagem;
+            return ["error" => true, "message" => $message];
+        }
+    }
+
+    /**
      * Retirando os adicionais que já estão relacionados ao produto;
      *
      * @param array $additionals
