@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProductImageRelation extends Migration
+class CreateProductImage extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateProductImageRelation extends Migration
      */
     public function up()
     {
-        Schema::create('product_image_relation', function (Blueprint $table) {
+        Schema::create('product_image', function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->bigInteger("product_id")->unsigned();
