@@ -35,3 +35,10 @@ Route::prefix("api/{$version}/")->group(function() {
     Route::delete("product/{idProduct}/additional", "Product\ProductController@removeAdditionalProductById");
     Route::get("product/q/{name}", "Product\ProductController@search");
 });
+
+/**
+ * Imagem do produto
+ */
+Route::prefix("api/{$version}/")->group(function() {
+    Route::post("product/{idProduct}/image", "Product\ImageController@store");
+});
