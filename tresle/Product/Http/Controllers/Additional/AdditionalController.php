@@ -4,8 +4,8 @@ namespace Tresle\Product\Http\Controllers\Additional;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Tresle\Product\Model\Additional\Additional;
-use Tresle\Product\Http\Requests\ProductCategoriesRequest as Request;
 
 class AdditionalController extends Controller
 {
