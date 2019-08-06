@@ -10,9 +10,11 @@ use Tresle\Product\Model\Product\Product;
 
 class ImageController extends Controller
 {
+
     /**
-     * @param \Tresle\Product\Http\Requests\Product\ProductRequest $request
-     * @return mixed
+     * @param \Tresle\Product\Http\Requests\Product\ImageRequest $request
+     * @param $idProduct
+     * @return array
      */
     public function store(\Tresle\Product\Http\Requests\Product\ImageRequest $request, $idProduct)
     {
@@ -36,6 +38,23 @@ class ImageController extends Controller
             $mensagem = "Erro ao cadastrar o produto";
             $message = strpos($e->getMessage(), "a foreign key constraint fails") ? "{$mensagem}: Categoria não encontrada" : $mensagem;
             return ["error" => true, "message" => $e->getMessage()];
+        }
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return array
+     * @throws \Exception
+     */
+    public function destroy(\Illuminate\Http\Request $request, $idProduct, $idImage)
+    {
+        try {
+            $image = Image::findOrFail((int)$idImage);
+            $image->delete();
+            return ["error" => false, "message" => ""];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Produto não encontrado"];
         }
     }
 }
