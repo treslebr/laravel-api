@@ -73,6 +73,10 @@ class CategoryController extends Controller
             return ["error" => false, "message" => ""];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Categoria não encontrada"];
+        }catch (\Illuminate\Database\QueryException $e) {
+            $mensagem = "Erro ao excluir a categoria";
+            $message = strpos($e->getMessage(), "delete") ? "{$mensagem}: Categoria associada a um produto" : $mensagem;
+            return ["error" => true, "message" => $message];
         }
     }
 
