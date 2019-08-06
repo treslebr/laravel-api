@@ -19,10 +19,10 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \Tresle\Product\Http\Requests\Product\ProductCategoriesRequest $request
      * @return mixed
      */
-    public function store(Request $request)
+    public function store(\Tresle\Product\Http\Requests\Product\ProductCategoriesRequest $request)
     {
         $data = $request->all();
         return Category::create($data);
@@ -43,11 +43,11 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param \Tresle\Product\Http\Requests\Product\ProductCategoriesRequest $request
      * @param $id
      * @return array
      */
-    public function update(\Illuminate\Http\Request $request, $id)
+    public function update(\Tresle\Product\Http\Requests\Product\ProductCategoriesRequest $request, $id)
     {
         try {
             $category = $this->getCategoryWith()->findOrFail((int)$id);

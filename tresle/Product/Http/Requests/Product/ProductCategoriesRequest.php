@@ -1,6 +1,6 @@
 <?php
 
-namespace Tresle\Product\Http\Requests;
+namespace Tresle\Product\Http\Requests\Product;
 
 use Illuminate\Foundation\Http\FormRequest;
 
