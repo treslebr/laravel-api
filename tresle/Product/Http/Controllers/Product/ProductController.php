@@ -9,7 +9,7 @@ use Tresle\Product\Model\Product\Product;
 
 class ProductController extends Controller
 {
-    private $with = ["additionals", "category"];
+    private $with = ["additionals", "category", "images"];
 
     /**
      * @param \Tresle\Product\Http\Requests\Product\ProductRequest $request

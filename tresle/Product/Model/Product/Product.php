@@ -35,4 +35,14 @@ class Product extends Model
             "product_category_id"
         );
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function images(){
+        return $this->hasMany(
+            "\Tresle\Product\Model\Product\Image",
+            "product_id"
+        );
+    }
 }
