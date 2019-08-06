@@ -23,8 +23,30 @@ class ProductCategoriesRequest extends FormRequest
      */
     public function rules()
     {
+        $rules = [
+            'name'                => "required|min:2|max:190|"
+        ];
+        switch($this->method()) {
+            case "POST": // CRIAÇÃO DE UM NOVO REGISTRO
+                $rules["name"]    .= "|unique:product_categories";
+                break;
+            case "PUT": // ATUALIZAÇÃO DE UM REGISTRO EXISTENTE
+                $rules["name"]    .= "|unique:product_categories,name,".$this->category;
+                break;
+            default:break;
+        }
+        return $rules;
+    }
+
+    /**
+     *  Filters to be applied to the input.
+     *
+     * @return array
+     */
+    public function filters()
+    {
         return [
-            'name' => 'required'
+            'name'                => "trim"
         ];
     }
 }
