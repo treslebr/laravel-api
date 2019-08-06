@@ -12,13 +12,22 @@ class ProductController extends Controller
     private $with = ["additionals", "category"];
 
     /**
-     * @param Request $request
+     * @param \Tresle\Product\Http\Requests\Product\ProductRequest $request
      * @return mixed
      */
     public function store(\Tresle\Product\Http\Requests\Product\ProductRequest $request)
     {
-        $data = $request->all();
-        return Product::create($data);
+        try {
+            $data = $request->all();
+            $product = Product::create($data);
+            return ["error" => false, "message" => "", "data" => $product];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Erro ao cadastrar o produto"];
+        }catch (\Illuminate\Database\QueryException $e) {
+            $mensagem = "Erro ao cadastrar o produto";
+            $message = strpos($e->getMessage(), "a foreign key constraint fails") ? "{$mensagem}: Categoria não encontrada" : $mensagem;
+            return ["error" => true, "message" => $message];
+        }
     }
 
     /**
