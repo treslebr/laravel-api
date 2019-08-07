@@ -20,13 +20,18 @@ class AdditionalController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return mixed
+     * @param \Tresle\Product\Http\Requests\Additional\AdditionalRequest $request
+     * @return array
      */
-    public function store(Request $request)
+    public function store(\Tresle\Product\Http\Requests\Additional\AdditionalRequest $request)
     {
-        $data = $request->all();
-        return Additional::create($data);
+        try {
+            $data = $request->all();
+            $additional = Additional::create($data);
+            return ["error" => false, "message" => "", "data" => $additional];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Erro ao cadastrar o adicional"];
+        }
     }
 
     /**
@@ -52,11 +57,11 @@ class AdditionalController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param \Tresle\Product\Http\Requests\Additional\AdditionalRequest $request
      * @param $id
      * @return array
      */
-    public function update(\Illuminate\Http\Request $request, $id)
+    public function update(\Tresle\Product\Http\Requests\Additional\AdditionalRequest $request, $id)
     {
         try {
             $additional = Additional::findOrFail((int)$id);
