@@ -4,8 +4,8 @@ namespace Tresle\Product\Http\Controllers\Additional;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Tresle\Product\Model\Additional\Additional;
-use Tresle\Product\Http\Requests\ProductCategoriesRequest as Request;
 
 class AdditionalController extends Controller
 {
@@ -16,7 +16,7 @@ class AdditionalController extends Controller
      */
     public function index()
     {
-        return Additional::with("category")->get();
+        return Additional::with(["category", "products"])->get();
     }
 
     /**
@@ -36,7 +36,7 @@ class AdditionalController extends Controller
     public function show($id)
     {
         try {
-            $additional = Additional::with("category")->findOrFail($id);
+            $additional = Additional::with(["category", "products"])->findOrFail($id);
 
             return [
                 "error" => false,

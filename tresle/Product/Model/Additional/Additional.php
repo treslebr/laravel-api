@@ -24,4 +24,16 @@ class Additional extends Model
     {
         return $this->belongsTo("Tresle\Product\Model\Additional\Category", "product_additional_category_id");
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function products(){
+        return $this->belongsToMany(
+            "Tresle\Product\Model\Product\Product",
+            "product_additional_relation",
+            "product_additional_id",
+            "product_id"
+        );
+    }
 }

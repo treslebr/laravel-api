@@ -20,10 +20,10 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \Tresle\Product\Http\Requests\Additional\AdditionalCategoryRequest $request
      * @return mixed
      */
-    public function store(Request $request)
+    public function store(\Tresle\Product\Http\Requests\Additional\AdditionalCategoryRequest $request)
     {
         $data = $request->all();
         return Category::create($data);
@@ -49,11 +49,11 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param \Tresle\Product\Http\Requests\Additional\AdditionalCategoryRequest $request
      * @param $id
      * @return array
      */
-    public function update(\Illuminate\Http\Request $request, $id)
+    public function update(\Tresle\Product\Http\Requests\Additional\AdditionalCategoryRequest $request, $id)
     {
         try {
             $category = Category::findOrFail((int)$id);
@@ -79,6 +79,10 @@ class CategoryController extends Controller
             return ["error" => false, "message" => ""];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => self::NAO_ENCONTRADO];
+        }catch (\Illuminate\Database\QueryException $e) {
+            $mensagem = "Erro ao excluir a categoria";
+            $message = strpos($e->getMessage(), "delete") ? "{$mensagem}: Categoria associada a um adicional" : $mensagem;
+            return ["error" => true, "message" => $message];
         }
     }
 
