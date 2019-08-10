@@ -9,6 +9,7 @@ Route::prefix("api/{$version}/user")->group(function() {
     Route::group([
         'middleware' => ['auth:api']
     ], function() {
+        Route::get('/logout', '\Tresle\User\Http\Auth\AuthController@logout');
         Route::get('/logged', '\Tresle\User\Http\Auth\AuthController@getUserLogged');
     });
 
