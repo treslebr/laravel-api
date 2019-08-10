@@ -75,4 +75,16 @@ class AuthController extends \App\Http\Controllers\Controller
     {
         return response()->json(Auth::user());
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
+    }
 }

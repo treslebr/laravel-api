@@ -47,7 +47,7 @@ return [
             'hash' => false,
         ],
 
-        'customer-api' => [
+        'customer' => [
             'driver' => 'passport',
             'provider' => 'customers',
             'hash' => false,
@@ -78,7 +78,7 @@ return [
         ],
         'customers' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => \Tresle\Customer\Model\Customer\Customer::class,
         ],
 
         // 'users' => [
