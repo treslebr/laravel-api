@@ -65,4 +65,14 @@ class AuthController extends \App\Http\Controllers\Controller
             )->toDateTimeString()
         ]);
     }
+
+    /**
+     * Get the authenticated User
+     *
+     * @return [json] user object
+     */
+    public function getUserLogged(Request $request)
+    {
+        return response()->json(Auth::user());
+    }
 }
