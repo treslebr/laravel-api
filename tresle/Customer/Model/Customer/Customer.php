@@ -17,7 +17,7 @@ class Customer extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'telephone', 'cellphone',
     ];
 
     /**
@@ -39,4 +39,6 @@ class Customer extends Authenticatable
     ];
 
     protected $table = "customer";
+
+    protected $guarded = "customer-api";
 }
