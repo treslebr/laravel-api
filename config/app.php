@@ -166,7 +166,7 @@ return [
          * Package Service Providers...
          */
         Tresle\Product\Providers\ProductServiceProvider::class,
-        Tresle\Customer\Providers\CustomerServiceProvider::class,
+        Tresle\User\Providers\UserServiceProvider::class,
 
         /*
          * Application Service Providers...
