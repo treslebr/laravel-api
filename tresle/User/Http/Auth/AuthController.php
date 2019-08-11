@@ -94,4 +94,24 @@ class AuthController extends \App\Http\Controllers\Controller
             'message' => 'Successfully logged out'
         ]);
     }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return array
+     * @throws \Exception
+     */
+    public function destroy(\Illuminate\Http\Request $request, $id)
+    {
+        try {
+            $user = User::findOrFail((int)$id);
+            $user->delete();
+            return ["error" => false, "message" => ""];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => self::NAO_ENCONTRADO];
+        }catch (\Illuminate\Database\QueryException $e) {
+            $mensagem = "Erro ao excluir o usuário";
+            return ["error" => true, "message" => $mensagem];
+        }
+    }
 }
