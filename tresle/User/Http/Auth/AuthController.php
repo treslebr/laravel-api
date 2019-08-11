@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends \App\Http\Controllers\Controller
 {
+
+    /**
+     * @var bool
+     */
+    protected $isAdmin = true;
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -28,6 +34,7 @@ class AuthController extends \App\Http\Controllers\Controller
             'password' => bcrypt($request->password),
             'telephone' => $request->telephone,
             'cellphone' => $request->cellphone,
+            'is_admin' => $this->isAdmin,
         ]);
         $user->save();
         return response()->json([
