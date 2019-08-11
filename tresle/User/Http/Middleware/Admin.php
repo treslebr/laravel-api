@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace Tresle\User\Http\Middleware;
 
 use Closure;
 
