@@ -5,7 +5,7 @@ $version = "v1";
 /**
  * Categoria de produtos
  */
-Route::prefix("api/{$version}/product/")->group(function() {
+Route::middleware(['auth:api', 'admin'])->prefix("api/{$version}/product/")->group(function() {
     Route::resource("category", "Product\CategoryController");
     Route::get("category/q/{name}", "Product\CategoryController@search");
 });

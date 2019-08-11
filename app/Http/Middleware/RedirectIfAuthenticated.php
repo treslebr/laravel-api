@@ -21,6 +21,11 @@ class RedirectIfAuthenticated
             return redirect('/home');
         }
 
-        return $next($request);
+        /**
+         * @todo Tresle
+         */
+        return response()->json([
+            'message' => 'Unauthorized'
+        ], 401);
     }
 }
