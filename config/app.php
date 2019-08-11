@@ -170,6 +170,7 @@ return [
          */
         Tresle\Product\Providers\ProductServiceProvider::class,
         Tresle\User\Providers\UserServiceProvider::class,
+        Tresle\Customer\Providers\CustomerServiceProvider::class,
 
         /*
          * Application Service Providers...
