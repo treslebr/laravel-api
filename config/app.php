@@ -165,6 +165,9 @@ return [
         /*
          * Package Service Providers...
          */
+        /**
+         * @todo Tresle
+         */
         Tresle\Product\Providers\ProductServiceProvider::class,
         Tresle\User\Providers\UserServiceProvider::class,
 

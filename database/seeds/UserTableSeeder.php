@@ -2,6 +2,9 @@
 
 use Illuminate\Database\Seeder;
 
+/**
+ * @todo Tresle
+ */
 class UserTableSeeder extends Seeder
 {
     /**

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @todo Tresle Como que passar essa configuração para o pacote
+ */
+
 return [
 
     /*

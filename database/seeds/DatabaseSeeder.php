@@ -11,6 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        /**
+         * @todo Tresle
+         */
         $this->call(UserTableSeeder::class);
     }
 }
