@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tresle\Customer\Http;
+namespace Tresle\Customer\Http\Controllers;
 
 
 use Carbon\Carbon;

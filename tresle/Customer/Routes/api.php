@@ -3,7 +3,7 @@
 $version = "v1";
 
 Route::prefix("api/{$version}/customer")->group(function() {
-    Route::post("/", "\Tresle\Customer\Http\CustomerController@store");
+    Route::post("/", "\Tresle\Customer\Http\Controllers\CustomerController@store");
     Route::post("/login", "\Tresle\User\Http\Auth\AuthController@login");
 
     Route::group([
