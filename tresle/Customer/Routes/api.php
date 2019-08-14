@@ -21,3 +21,11 @@ Route::prefix("api/{$version}/customer/{idCustomer}/address")->group(function() 
         Route::post("/", "\Tresle\Customer\Http\Controllers\CustomerAddressController@store");
     });
 });
+
+Route::prefix("api/{$version}/customer/address")->group(function() {
+    Route::group([
+        'middleware' => ['auth:api', 'authCustomer']
+    ], function() {
+        Route::post("/", "\Tresle\Customer\Http\Controllers\CustomerAddressController@addAddressCustomerLogged");
+    });
+});
