@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
          * @todo Tresle
          */
         'admin' => \Tresle\User\Http\Middleware\Admin::class,
+        'authCustomer' => \Tresle\User\Http\Middleware\AuthCustomer::class,
     ];
 
     /**
