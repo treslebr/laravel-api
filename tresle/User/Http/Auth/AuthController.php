@@ -69,7 +69,8 @@ class AuthController extends \App\Http\Controllers\Controller
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
-            )->toDateTimeString()
+            )->toDateTimeString(),
+            'is_admin' => $user->is_admin
         ]);
     }
 
@@ -115,3 +116,4 @@ class AuthController extends \App\Http\Controllers\Controller
         }
     }
 }
+
