@@ -19,6 +19,7 @@ Route::prefix("api/{$version}/customer/{idCustomer}/address")->group(function() 
         'middleware' => ['auth:api', 'admin']
     ], function() {
         Route::post("/", "\Tresle\Customer\Http\Controllers\CustomerAddressController@store");
+        Route::delete('/{idAddress}', '\Tresle\Customer\Http\Controllers\CustomerAddressController@destroy');
     });
 });
 
@@ -27,5 +28,6 @@ Route::prefix("api/{$version}/customer/address")->group(function() {
         'middleware' => ['auth:api', 'authCustomer']
     ], function() {
         Route::post("/", "\Tresle\Customer\Http\Controllers\CustomerAddressController@addAddressCustomerLogged");
+        Route::delete('/{idAddress}', '\Tresle\Customer\Http\Controllers\CustomerAddressController@deleteAddressCustomerLogged');
     });
 });

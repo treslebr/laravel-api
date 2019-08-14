@@ -75,4 +75,45 @@ class CustomerAddressController  extends Controller
         $address->save();
         return $address;
     }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param $idCustomer
+     * @param $idAddress
+     * @return array
+     */
+    public function destroy(\Illuminate\Http\Request $request, $idCustomer, $idAddress)
+    {
+        return $this->delete($idCustomer, $idAddress);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param $idAddress
+     * @return array
+     */
+    public function deleteAddressCustomerLogged(\Illuminate\Http\Request $request, $idAddress)
+    {
+        $customerAuth = Auth::user();
+        return $this->delete($customerAuth->id, $idAddress);
+    }
+
+    /**
+     * @param $idCustomer
+     * @param $idAddress
+     * @return array
+     */
+    private function delete($idCustomer, $idAddress){
+        try {
+            $address = Address::where('customer_id', (int)$idCustomer)
+                ->where('id', (int)$idAddress)
+                ->delete();
+            return ["error" => false, "message" => ""];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Categoria não encontrada"];
+        }catch (\Illuminate\Database\QueryException $e) {
+            $mensagem = "Erro ao excluir o endereço";
+            return ["error" => true, "message" => $mensagem];
+        }
+    }
 }
