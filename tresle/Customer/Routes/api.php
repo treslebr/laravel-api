@@ -7,7 +7,7 @@ Route::prefix("api/{$version}/customer")->group(function() {
     Route::post("/login", "\Tresle\User\Http\Auth\AuthController@login");
 
     Route::group([
-        'middleware' => ['auth:api']
+        'middleware' => ['auth:api', 'authCustomer']
     ], function() {
         Route::get('/logout', '\Tresle\User\Http\Auth\AuthController@logout');
         Route::get('/logged', '\Tresle\User\Http\Auth\AuthController@getUserLogged');
@@ -16,7 +16,7 @@ Route::prefix("api/{$version}/customer")->group(function() {
 
 Route::prefix("api/{$version}/customer/{idCustomer}/address")->group(function() {
     Route::group([
-        'middleware' => ['auth:api']
+        'middleware' => ['auth:api', 'admin']
     ], function() {
         Route::post("/", "\Tresle\Customer\Http\Controllers\CustomerAddressController@store");
     });
