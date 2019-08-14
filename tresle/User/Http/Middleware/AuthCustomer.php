@@ -3,6 +3,7 @@
 namespace Tresle\User\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Log;
 
 class AuthCustomer
 {
