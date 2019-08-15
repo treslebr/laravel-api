@@ -5,9 +5,11 @@ namespace Tresle\Customer\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \Tresle\Customer\Http\Requests\CustomerAddressRequest;
 use Tresle\Customer\Model\Address\Address;
+use Tresle\Customer\Model\Customer\Customer;
 use Tresle\User\Model\User;
 
 class CustomerAddressController  extends Controller
@@ -158,5 +160,38 @@ class CustomerAddressController  extends Controller
             $mensagem = "Erro ao excluir o endereço";
             return ["error" => true, "message" => $mensagem];
         }
+    }
+
+    /**
+     * Get the authenticated User
+     *
+     * @return [json] user object
+     */
+    public function getCustomerLogged(Request $request)
+    {
+        return response()->json(Customer::with('addresses')->find(Auth::id()));
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return array
+     */
+    public function show(Request $request, $id)
+    {
+        try {
+            $customer = Customer::with('addresses')->findOrFail((int)$id);
+            return ["error" => false, "message" => "", "data" => $customer];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Cliente não encontrado"];
+        }
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Customer[]
+     */
+    public function index()
+    {
+        return Customer::with('addresses')->get();
     }
 }
