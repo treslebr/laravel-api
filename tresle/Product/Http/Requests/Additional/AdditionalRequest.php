@@ -24,17 +24,23 @@ class AdditionalRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name'                           => "required|min:2|max:190|",
+            'name'                           => "min:2|max:190",
             "status"                         => "boolean",
             "price"                          => "numeric",
-            "product_additional_category_id" =>  "required|exists:product_additional_category,id"
+            "product_additional_category_id" =>  "exists:product_additional_category,id"
         ];
         switch($this->method()) {
             case "POST": // CRIAÇÃO DE UM NOVO REGISTRO
-                $rules["name"]    .= "|unique:product_additional";
+                $rules["name"]    .= "|required|unique:product_additional";
+                $rules["product_additional_category_id"]  .= "|required";
                 break;
             case "PUT": // ATUALIZAÇÃO DE UM REGISTRO EXISTENTE
-                $rules["name"]    .= "|unique:product_additional,name,".$this->additional;
+                $rules["name"]    .= "|required|unique:product_additional,name,".$this->additional;
+                $rules["product_additional_category_id"]  .= "|required";
+                break;
+            case "PATCH": // ATUALIZAÇÃO DE UM REGISTRO EXISTENTE
+                $rules["name"]    .= "|filled|unique:product_additional,name,".$this->additional;
+                $rules["product_additional_category_id"]  .= "|filled";
                 break;
             default:break;
         }
