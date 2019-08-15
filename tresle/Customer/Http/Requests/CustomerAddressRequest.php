@@ -25,18 +25,40 @@ class CustomerAddressRequest  extends FormRequest
      */
     public function rules()
     {
-
         $rules = [
-            'postcode'    => "required|min:2|max:190",
-            'country'     => "required|min:2|max:190",
-            'state'       => "required|min:2|max:190",
-            'city'        => "required|min:2|max:190",
-            'region'      => "required|min:2|max:190",
-            'street_1'    => "required|min:2|max:190",
-            'street_2'    => "required|min:2|max:190",
-            'street_3'    => "required|min:2|max:190",
+            'postcode'    => "min:2|max:190|",
+            'country'     => "min:2|max:190|",
+            'state'       => "min:2|max:190|",
+            'city'        => "min:2|max:190|",
+            'region'      => "min:2|max:190|",
+            'street_1'    => "min:2|max:190|",
+            'street_2'    => "min:2|max:190|",
+            'street_3'    => "min:2|max:190|",
             'street_4'    => "min:2|max:190"
         ];
+
+        switch($this->method()) {
+            case "PATCH": // ATUALIZAÇÃO DE UMA PARTE DO REGISTRO EXISTENTE
+                $rules['postcode']  .= "filled";
+                $rules['country']   .= "filled";
+                $rules['state']     .= "filled";
+                $rules['city']      .= "filled";
+                $rules['region']    .= "filled";
+                $rules['street_1']  .= "filled";
+                $rules['street_2']  .= "filled";
+                $rules['street_3']  .= "filled";
+                break;
+            default :
+                $rules['postcode']  .= "required";
+                $rules['country']   .= "required";
+                $rules['state']     .= "required";
+                $rules['city']      .= "required";
+                $rules['region']    .= "required";
+                $rules['street_1']  .= "required";
+                $rules['street_2']  .= "required";
+                $rules['street_3']  .= "required";
+                break;
+        }
         return $rules;
     }
 
