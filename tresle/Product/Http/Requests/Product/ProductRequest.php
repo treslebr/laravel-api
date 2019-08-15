@@ -24,17 +24,23 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name'                => "required|min:2|max:190|",
-            "product_category_id" => "required|integer",
+            'name'                => "min:2|max:190|",
+            "product_category_id" => "integer",
             "status"              => "boolean",
             "price"               => "numeric"
         ];
         switch($this->method()) {
             case "POST": // CRIAÇÃO DE UM NOVO REGISTRO
-                $rules["name"]    .= "|unique:product";
+                $rules["name"]    .= "|required|unique:product";
+                $rules["product_category_id"]  .= "|required|unique:product";
                 break;
             case "PUT": // ATUALIZAÇÃO DE UM REGISTRO EXISTENTE
-                $rules["name"]    .= "|unique:product,name,".$this->product;
+                $rules["name"]    .= "|required|unique:product,name,".$this->product;
+                $rules["product_category_id"]  .= "|required";
+                break;
+            case "PATCH": // ATUALIZAÇÃO DE UM REGISTRO EXISTENTE
+                $rules["name"]    .= "|filled|unique:product,name,".$this->product;
+                $rules["product_category_id"]  .= "|filled";
                 break;
             default:break;
         }
