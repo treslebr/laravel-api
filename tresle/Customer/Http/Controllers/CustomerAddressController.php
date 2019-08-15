@@ -88,6 +88,49 @@ class CustomerAddressController  extends Controller
     }
 
     /**
+     * @param CustomerAddressRequest $request
+     * @param $idCustomer
+     * @param $idAddress
+     * @return array
+     */
+    public function update(CustomerAddressRequest $request, $idCustomer, $idAddress)
+    {
+        return $this->updateAction($request, $idCustomer, $idAddress);
+    }
+
+    /**
+     * @param CustomerAddressRequest $request
+     * @param $idAddress
+     * @return array
+     */
+    public function updateAddressCustomerLogged(CustomerAddressRequest $request, $idAddress)
+    {
+        $customerAuth = Auth::user();
+        return $this->updateAction($request, $customerAuth->id, $idAddress);
+    }
+
+    /**
+     * @param CustomerAddressRequest $request
+     * @param $idCustomer
+     * @param $idAddress
+     * @return array
+     */
+    public function updateAction(CustomerAddressRequest $request, $idCustomer, $idAddress)
+    {
+        try {
+            $address = Address::where('id', (int)$idAddress)
+                ->where('customer_id', (int)$idCustomer)
+                ->firstOrFail();;
+
+            $data = $request->all();
+            $address->update($data);
+            return ["error" => false, "message" => Address::where('id', (int)$idAddress)->get()];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Endereço não encontrado"];
+        }
+    }
+
+    /**
      * @param \Illuminate\Http\Request $request
      * @param $idAddress
      * @return array

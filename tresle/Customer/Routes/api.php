@@ -20,6 +20,7 @@ Route::prefix("api/{$version}/customer/{idCustomer}/address")->group(function() 
     ], function() {
         Route::post("/", "\Tresle\Customer\Http\Controllers\CustomerAddressController@store");
         Route::delete('/{idAddress}', '\Tresle\Customer\Http\Controllers\CustomerAddressController@destroy');
+        Route::put('/{idAddress}', '\Tresle\Customer\Http\Controllers\CustomerAddressController@update');
     });
 });
 
@@ -29,5 +30,6 @@ Route::prefix("api/{$version}/customer/address")->group(function() {
     ], function() {
         Route::post("/", "\Tresle\Customer\Http\Controllers\CustomerAddressController@addAddressCustomerLogged");
         Route::delete('/{idAddress}', '\Tresle\Customer\Http\Controllers\CustomerAddressController@deleteAddressCustomerLogged');
+        Route::put('/{idAddress}', '\Tresle\Customer\Http\Controllers\CustomerAddressController@updateAddressCustomerLogged');
     });
 });
