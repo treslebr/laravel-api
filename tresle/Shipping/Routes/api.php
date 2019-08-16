@@ -11,6 +11,7 @@ Route::prefix("api/{$version}/shipping")->group(function() {
         Route::put('/{id}', '\Tresle\Shipping\Http\Controllers\ShippingController@update');
         Route::patch('/{id}', '\Tresle\Shipping\Http\Controllers\ShippingController@update');
         Route::get('/{id}', '\Tresle\Shipping\Http\Controllers\ShippingController@show');
+        Route::delete('/{id}', '\Tresle\Shipping\Http\Controllers\ShippingController@destroy');
     });
 
 });

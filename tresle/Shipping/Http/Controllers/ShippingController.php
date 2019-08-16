@@ -73,4 +73,25 @@ class ShippingController extends Controller
         return Shipping::get();
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return array
+     * @throws \Exception
+     */
+    public function destroy(\Illuminate\Http\Request $request, $id)
+    {
+        try {
+            $shipping = Shipping::findOrFail((int)$id);
+            $shipping->delete();
+            return ["error" => false, "message" => ""];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Localidade não encontrada."];
+        }catch (\Illuminate\Database\QueryException $e) {
+            $mensagem = "Erro ao excluir a localidade";
+            $message = strpos($e->getMessage(), "delete") ? "{$mensagem}: Localidade associada a um endereço" : $mensagem;
+            return ["error" => true, "message" => $message];
+        }
+    }
+
 }
