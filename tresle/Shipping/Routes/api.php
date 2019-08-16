@@ -7,6 +7,7 @@ Route::prefix("api/{$version}/shipping")->group(function() {
         'middleware' => ['auth:api', 'admin']
     ], function() {
         Route::post('/', '\Tresle\Shipping\Http\Controllers\ShippingController@store');
+        Route::put('/{id}', '\Tresle\Shipping\Http\Controllers\ShippingController@update');
     });
 
 });

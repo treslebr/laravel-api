@@ -29,4 +29,21 @@ class ShippingController extends Controller
         }
     }
 
+    /**
+     * @param \Tresle\Shipping\Http\Requests\Shipping $request
+     * @param $id
+     * @return array
+     */
+    public function update(\Tresle\Shipping\Http\Requests\Shipping $request, $id)
+    {
+        try {
+            $category = Shipping::findOrFail((int)$id);
+            $data = $request->all();
+            $category->update($data);
+            return ["error" => false, "message" => ""];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Localidade não encontrada."];
+        }
+    }
+
 }
