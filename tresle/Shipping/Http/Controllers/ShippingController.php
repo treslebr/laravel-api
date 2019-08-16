@@ -19,8 +19,8 @@ class ShippingController extends Controller
     {
         try {
             $data = $request->all();
-            $product = Shipping::create($data);
-            return ["error" => false, "message" => "", "data" => $product];
+            $shipping = Shipping::create($data);
+            return ["error" => false, "message" => "", "data" => $shipping];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Erro ao cadastrar o bairro"];
         }catch (\Illuminate\Database\QueryException $e) {
@@ -37,13 +37,40 @@ class ShippingController extends Controller
     public function update(\Tresle\Shipping\Http\Requests\Shipping $request, $id)
     {
         try {
-            $category = Shipping::findOrFail((int)$id);
+            $shipping = Shipping::findOrFail((int)$id);
             $data = $request->all();
-            $category->update($data);
+            $shipping->update($data);
             return ["error" => false, "message" => ""];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Localidade não encontrada."];
         }
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function show($id)
+    {
+        try {
+            $shipping = Shipping::findOrFail((int)$id);
+
+            return [
+                "error" => false,
+                "message" => "",
+                "data" => $shipping
+            ];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Localidade não encontrada."];
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function index()
+    {
+        return Shipping::get();
     }
 
 }
