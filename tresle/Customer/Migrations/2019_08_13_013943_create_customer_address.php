@@ -22,8 +22,9 @@ class CreateCustomerAddress extends Migration
             $table->string('region');
             $table->string('street_1');
             $table->string('street_2');
-            $table->string('street_3');
-            $table->string('street_4')->nullable();
+            $table->string('street_3')->nullable();
+            $table->bigInteger("shipping_id")->unsigned();
+            $table->foreign("shipping_id")->references('id')->on("shipping");
             $table->bigInteger("customer_id")->unsigned();
             $table->foreign("customer_id")->references('id')->on("users");
             $table->timestamps();
