@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Tresle\User\Model\User;
 
 /**
  * @todo Tresle
@@ -14,12 +15,11 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\User::class)->create([
-            'email' => "peterclayder@gmail.com"
-        ]);
-
-        factory(\App\User::class)->create([
-            'email' => "fpires@id.uff.br"
-        ]);
+        User::create(array(
+            'name' => 'admin',
+            'password' => Hash::make('admin123'),
+            'email' => "admin@gmail.com",
+            'telephone' => "21971579961",
+        ));
     }
 }
