@@ -5,6 +5,8 @@ namespace Tresle\User\Http\Auth;
 
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use RuntimeException;
 use Tresle\User\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,30 +50,41 @@ class AuthController extends \App\Http\Controllers\Controller
      */
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-            'remember_me' => 'boolean'
-        ]);
-        $credentials = request(['email', 'password']);
-        if(!Auth::attempt($credentials))
+
+        try {
+            $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string',
+                'remember_me' => 'boolean'
+            ]);
+            $credentials = request(['email', 'password']);
+            if(!Auth::attempt($credentials))
+                return response()->json([
+                    'message' => 'Unauthorized'
+                ], 401);
+            $user = $request->user();
+            $tokenResult = $user->createToken('Personal Access Token');
+            $token = $tokenResult->token;
+            if ($request->remember_me)
+                $token->expires_at = Carbon::now()->addWeeks(1);
+            $token->save();
             return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
-        $user = $request->user();
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->token;
-        if ($request->remember_me)
-            $token->expires_at = Carbon::now()->addWeeks(1);
-        $token->save();
-        return response()->json([
-            'access_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse(
-                $tokenResult->token->expires_at
-            )->toDateTimeString(),
-            'is_admin' => $user->is_admin
-        ]);
+                'access_token' => $tokenResult->accessToken,
+                'token_type' => 'Bearer',
+                'expires_at' => Carbon::parse(
+                    $tokenResult->token->expires_at
+                )->toDateTimeString(),
+                'is_admin' => $user->is_admin
+            ]);
+        }
+        catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Erro ao logar"];
+        }catch (RuntimeException $e) {
+                return ["error" => true, "message" => $e->getMessage()];
+            }
+
+
+
     }
 
     /**
