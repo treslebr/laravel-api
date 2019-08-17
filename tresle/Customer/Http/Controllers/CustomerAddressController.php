@@ -72,7 +72,7 @@ class CustomerAddressController  extends Controller
         $address->street_1     = $request->input("street_1");
         $address->street_2     = $request->input("street_2");
         $address->street_3     = $request->input("street_3");
-        $address->street_4     = $request->input("street_4");
+        $address->shipping_id  = $request->input("shipping_id");
         $address->customer_id  = (int)$idCustomer;
         $address->save();
         return $address;
@@ -169,7 +169,8 @@ class CustomerAddressController  extends Controller
      */
     public function getCustomerLogged(Request $request)
     {
-        return response()->json(Customer::with('addresses')->find(Auth::id()));
+        return Customer::with('addresses.shipping')
+            ->find(Auth::id());
     }
 
     /**
@@ -180,7 +181,7 @@ class CustomerAddressController  extends Controller
     public function show(Request $request, $id)
     {
         try {
-            $customer = Customer::with('addresses')->findOrFail((int)$id);
+            $customer = Customer::with('addresses.shipping')->findOrFail((int)$id);
             return ["error" => false, "message" => "", "data" => $customer];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Cliente não encontrado"];
@@ -192,6 +193,6 @@ class CustomerAddressController  extends Controller
      */
     public function index()
     {
-        return Customer::with('addresses')->get();
+        return Customer::with(['addresses', 'shipping'])->get();
     }
 }

@@ -19,7 +19,7 @@ class Address extends Model
         "street_1",
         "street_2",
         "street_3",
-        "street_4",
+        "shipping_id",
         "customer_id"
     ];
 
@@ -27,5 +27,15 @@ class Address extends Model
      * @var string
      */
     protected $table = "customer_address";
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function shipping(){
+        return $this->belongsTo(
+            "\Tresle\Shipping\Model\Shipping",
+            "shipping_id"
+        );
+    }
 
 }

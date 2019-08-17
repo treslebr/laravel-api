@@ -34,7 +34,7 @@ class CustomerAddressRequest  extends FormRequest
             'street_1'    => "min:2|max:190|",
             'street_2'    => "min:2|max:190|",
             'street_3'    => "min:2|max:190|",
-            'street_4'    => "min:2|max:190"
+            'shipping_id' => "integer|exists:shipping,id|"
         ];
 
         switch($this->method()) {
@@ -46,7 +46,7 @@ class CustomerAddressRequest  extends FormRequest
                 $rules['region']    .= "filled";
                 $rules['street_1']  .= "filled";
                 $rules['street_2']  .= "filled";
-                $rules['street_3']  .= "filled";
+                $rules['shipping_id']  .= "filled";
                 break;
             default :
                 $rules['postcode']  .= "required";
@@ -56,7 +56,7 @@ class CustomerAddressRequest  extends FormRequest
                 $rules['region']    .= "required";
                 $rules['street_1']  .= "required";
                 $rules['street_2']  .= "required";
-                $rules['street_3']  .= "required";
+                $rules['shipping_id']  .= "required";
                 break;
         }
         return $rules;
@@ -78,7 +78,7 @@ class CustomerAddressRequest  extends FormRequest
             'street_1'    => "trim",
             'street_2'    => "trim",
             'street_3'    => "trim",
-            'street_4'    => "trim"
+            'shipping_id' => "trim"
         ];
     }
 
