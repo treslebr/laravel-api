@@ -172,6 +172,7 @@ return [
         Tresle\User\Providers\UserServiceProvider::class,
         Tresle\Customer\Providers\CustomerServiceProvider::class,
         Tresle\Shipping\Providers\ShippingServiceProvider::class,
+        Tresle\Cart\Providers\CartServiceProvider::class,
 
         /*
          * Application Service Providers...
