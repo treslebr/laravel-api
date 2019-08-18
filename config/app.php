@@ -173,6 +173,7 @@ return [
         Tresle\Customer\Providers\CustomerServiceProvider::class,
         Tresle\Shipping\Providers\ShippingServiceProvider::class,
         Tresle\Cart\Providers\CartServiceProvider::class,
+        Tresle\Order\Providers\OrderServiceProvider::class,
 
         /*
          * Application Service Providers...
