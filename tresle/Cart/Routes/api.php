@@ -8,5 +8,6 @@ Route::prefix("api/{$version}/cart")->group(function() {
         'middleware' => ['auth:api', 'authCustomer']
     ], function() {
         Route::post('/', '\Tresle\Cart\Http\Controllers\CartController@store');
+        Route::get('/', '\Tresle\Cart\Http\Controllers\CartController@index');
     });
 });

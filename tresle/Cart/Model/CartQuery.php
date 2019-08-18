@@ -4,7 +4,9 @@
 namespace Tresle\Cart\Model;
 
 
+use Illuminate\Support\Facades\Log;
 use Tresle\Cart\Http\Requests\CartRequest;
+use Tresle\Product\Model\Additional\Additional;
 use Tresle\Product\Model\Product\Product;
 
 class CartQuery
@@ -39,5 +41,25 @@ class CartQuery
                 "additionals_id" => json_encode($additionalsChecked)
             ]
         );
+    }
+
+    /**
+     * @param $customerId
+     * @return mixed
+     */
+    public function getCartItemsByCustomerId($customerId){
+        $items = Cart::where("customer_id", $customerId)
+            ->with("product")
+            ->get();
+
+        foreach ($items as $item){
+            $arrayAdditionalsId = json_decode($item->additionals_id);
+            $arrayAdditional = [];
+            foreach ($arrayAdditionalsId as $additionalId){
+                $arrayAdditional[] = Additional::find($additionalId);
+            }
+            $item->additionals = $arrayAdditional;
+        }
+        return $items;
     }
 }
