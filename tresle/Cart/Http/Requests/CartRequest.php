@@ -26,11 +26,19 @@ class CartRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            "qty"            => "required|integer",
-            "obs"            => "required",
-            "product_id"     => "required|integer|exists:product,id",
-            "additionals_id" => "required"
+            "qty"            => "integer|"
         ];
+
+        if($this->method() === "PATCH"){
+            $rules["qty"]           .= "filled|";
+            $rules["obs"]            = "";
+            $rules["additionals_id"] = "";
+        } else{
+            $rules["product_id"]     = "required|integer|exists:product,id";
+            $rules["qty"]           .= "required|";
+            $rules["obs"]            = "required";
+            $rules["additionals_id"] = "required";
+        }
         return $rules;
     }
 

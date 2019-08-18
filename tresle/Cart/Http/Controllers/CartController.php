@@ -32,7 +32,7 @@ class CartController extends Controller
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Product[]
+     * @return array
      */
     public function index()
     {
@@ -56,11 +56,33 @@ class CartController extends Controller
     public function destroy(\Illuminate\Http\Request $request, $id)
     {
         try {
-            $cart = Cart::findOrFail((int)$id);
+            $user = Auth::user();
+            $cart = Cart::where('customer_id', $user->id)->findOrFail((int)$id);
             $cart->delete();
             return ["error" => false, "message" => ""];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Item do carrinho não encontrado."];
+        }
+    }
+
+    /**
+     * @param \Tresle\Cart\Http\Requests\CartRequest $request
+     * @param $id
+     * @return array
+     */
+    public function update(\Tresle\Cart\Http\Requests\CartRequest $request, $id)
+    {
+        try {
+            $user = Auth::user();
+            $cart = new CartQuery();
+            $updated = $cart->updatePatch($request, $user->id, $id);
+
+            return ["error" => false, "message" => "", "data" => $updated];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Item não encontrado"];
+        }catch (\Illuminate\Database\QueryException $e) {
+            $mensagem = "Erro ao atualizar o item";
+            return ["error" => true, "message" => $mensagem];
         }
     }
 
