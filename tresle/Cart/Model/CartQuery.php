@@ -11,10 +11,9 @@ class CartQuery
 {
     /**
      * @param CartRequest $request
-     * @param Cart $cart
      * @param $customerId
      */
-    public function insert(CartRequest $request, Cart $cart, $customerId){
+    public function insert(CartRequest $request, $customerId){
         $additionalsId = $request->input("additionals_id");
         $productId     = $request->input("product_id");
         $product       = Product::find($productId);
@@ -29,12 +28,16 @@ class CartQuery
             }
         }
 
-        $cart->create(array(
-            "customer_id"    => $customerId,
-            "qty"            => $request->input("qty"),
-            "obs"            => $request->input("obs"),
-            "product_id"     => $request->input("product_id"),
-            "additionals_id" => json_encode($additionalsChecked),
-        ));
+        Cart::updateOrCreate(
+            [
+                'customer_id' => $customerId,
+                'product_id'  => (int)$request->input("product_id")
+            ] ,
+            [
+                "qty"            => (int)$request->input("qty"),
+                "obs"            => $request->input("obs"),
+                "additionals_id" => json_encode($additionalsChecked)
+            ]
+        );
     }
 }

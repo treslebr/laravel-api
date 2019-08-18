@@ -18,7 +18,7 @@ class CartController extends Controller
         try {
             $user = Auth::user();
             $cart = new CartQuery();
-            $cart->insert($request, new Cart(), $user->id);
+            $cart->insert($request, $user->id);
             return ["error" => false, "message" => "", "data" => $cart];
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Erro ao inserir item no carrinho"];
