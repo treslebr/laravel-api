@@ -32,7 +32,7 @@ class ProductRequest extends FormRequest
         switch($this->method()) {
             case "POST": // CRIAÇÃO DE UM NOVO REGISTRO
                 $rules["name"]    .= "|required|unique:product";
-                $rules["product_category_id"]  .= "|required|unique:product";
+                $rules["product_category_id"]  .= "|required";
                 break;
             case "PUT": // ATUALIZAÇÃO DE UM REGISTRO EXISTENTE
                 $rules["name"]    .= "|required|unique:product,name,".$this->product;
