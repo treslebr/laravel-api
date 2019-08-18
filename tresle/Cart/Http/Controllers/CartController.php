@@ -48,4 +48,20 @@ class CartController extends Controller
         }
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param $id
+     * @return array
+     */
+    public function destroy(\Illuminate\Http\Request $request, $id)
+    {
+        try {
+            $cart = Cart::findOrFail((int)$id);
+            $cart->delete();
+            return ["error" => false, "message" => ""];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Item do carrinho não encontrado."];
+        }
+    }
+
 }

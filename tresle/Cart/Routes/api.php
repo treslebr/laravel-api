@@ -9,5 +9,6 @@ Route::prefix("api/{$version}/cart")->group(function() {
     ], function() {
         Route::post('/', '\Tresle\Cart\Http\Controllers\CartController@store');
         Route::get('/', '\Tresle\Cart\Http\Controllers\CartController@index');
+        Route::delete('/{id}', '\Tresle\Cart\Http\Controllers\CartController@destroy');
     });
 });

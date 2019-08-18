@@ -3,8 +3,6 @@
 
 namespace Tresle\Cart\Model;
 
-
-use Illuminate\Support\Facades\Log;
 use Tresle\Cart\Http\Requests\CartRequest;
 use Tresle\Product\Model\Additional\Additional;
 use Tresle\Product\Model\Product\Product;
