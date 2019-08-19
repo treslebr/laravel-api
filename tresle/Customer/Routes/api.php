@@ -10,14 +10,14 @@ Route::prefix("api/{$version}/customer")->group(function() {
         'middleware' => ['auth:api', 'authCustomer']
     ], function() {
         Route::get('/logout', '\Tresle\User\Http\Auth\AuthController@logout');
-        Route::get('/logged', '\Tresle\Customer\Http\Controllers\CustomerAddressController@getCustomerLogged');
+        Route::get('/logged', '\Tresle\Customer\Http\Controllers\CustomerController@getCustomerLogged');
     });
 
     Route::group([
         'middleware' => ['auth:api', 'admin']
     ], function() {
-        Route::get('/', '\Tresle\Customer\Http\Controllers\CustomerAddressController@index');
-        Route::get('/{id}', '\Tresle\Customer\Http\Controllers\CustomerAddressController@show');
+        Route::get('/', '\Tresle\Customer\Http\Controllers\CustomerController@index');
+        Route::get('/{id}', '\Tresle\Customer\Http\Controllers\CustomerController@show');
     });
 
 });
