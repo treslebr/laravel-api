@@ -15,5 +15,9 @@ class DatabaseSeeder extends Seeder
          * @todo Tresle
          */
         $this->call(UserTableSeeder::class);
+        $this->call(AdditionalCategoryTableSeeder::class);
+        $this->call(AdditionalTableSeeder::class);
+        $this->call(ProductCategoryTableSeeder::class);
+        $this->call(ProductTableSeeder::class);
     }
 }
