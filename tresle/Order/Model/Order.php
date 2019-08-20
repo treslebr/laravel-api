@@ -14,6 +14,11 @@ class Order extends Model
     protected $table = "order";
 
     /**
+     * @var array
+     */
+    protected $fillable = ["status"];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function customer()

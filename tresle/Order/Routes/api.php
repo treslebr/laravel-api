@@ -8,4 +8,10 @@ Route::prefix("api/{$version}/order")->group(function() {
     ], function() {
         Route::post('/', '\Tresle\Order\Http\Controllers\OrderController@store');
     });
+
+    Route::group([
+        'middleware' => ['auth:api', 'admin']
+    ], function() {
+        Route::put('/{id}', '\Tresle\Order\Http\Controllers\OrderController@update');
+    });
 });
