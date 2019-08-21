@@ -3,20 +3,23 @@
 namespace Tresle\Product\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
+use ErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Tresle\Product\Model\Product\Image;
 use Tresle\Product\Model\Product\Product;
+\Tresle\Product\Http\Requests\Product\ImageRequest;
 
 class ImageController extends Controller
 {
+    const NAO_ENCONTRADO = "Imagem não encontrada.";
 
     /**
      * @param \Tresle\Product\Http\Requests\Product\ImageRequest $request
      * @param $idProduct
      * @return array
      */
-    public function store(\Tresle\Product\Http\Requests\Product\ImageRequest $request, $idProduct)
+    public function store(ImageRequest $request, $idProduct)
     {
         try {
             $product = Product::findOrFail((int)$idProduct);
@@ -31,13 +34,15 @@ class ImageController extends Controller
             $imagem->product_id = $idProduct;
 
             $imagem->save();
-            return ["error" => false, "message" => "", "data" => ""];
+            return $imagem;
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Produto não encontrado"];
+            return response(["errors" => true, "message" => "Produto não encontrado."], 404);
         }catch (\Illuminate\Database\QueryException $e) {
             $mensagem = "Erro ao cadastrar o produto";
             $message = strpos($e->getMessage(), "a foreign key constraint fails") ? "{$mensagem}: Categoria não encontrada" : $mensagem;
-            return ["error" => true, "message" => $e->getMessage()];
+            return response(["errors" => true, "message" => $message], 422);
+        }catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
@@ -52,9 +57,11 @@ class ImageController extends Controller
         try {
             $image = Image::findOrFail((int)$idImage);
             $image->delete();
-            return ["error" => false, "message" => ""];
+            return ["error" => false, "message" => "Imagem excluída"];
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Produto não encontrado"];
+            return response(["errors" => true, "message" => "Produto não encontrado."], 404);
+        }catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 }
