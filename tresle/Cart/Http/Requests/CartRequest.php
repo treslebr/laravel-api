@@ -37,7 +37,6 @@ class CartRequest extends FormRequest
             $rules["product_id"]     = "required|integer|exists:product,id";
             $rules["qty"]           .= "required|";
             $rules["obs"]            = "required";
-            $rules["additionals_id"] = "required";
         }
         return $rules;
     }

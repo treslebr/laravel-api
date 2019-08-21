@@ -27,7 +27,7 @@ class CartController extends Controller
         } catch (ModelNotFoundException $e) {
             return ["error" => true, "message" => "Erro ao inserir item no carrinho"];
         }catch (\Illuminate\Database\QueryException $e) {
-            return ["error" => true, "message" => $e->getMessage()];
+            return ["error" => true, "message" => "Erro no banco de dados"];
         }
     }
 

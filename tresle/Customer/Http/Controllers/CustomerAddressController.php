@@ -162,37 +162,4 @@ class CustomerAddressController  extends Controller
         }
     }
 
-    /**
-     * Get the authenticated User
-     *
-     * @return [json] user object
-     */
-    public function getCustomerLogged(Request $request)
-    {
-        return Customer::with('addresses.shipping')
-            ->find(Auth::id());
-    }
-
-    /**
-     * @param Request $request
-     * @param $id
-     * @return array
-     */
-    public function show(Request $request, $id)
-    {
-        try {
-            $customer = Customer::with('addresses.shipping')->findOrFail((int)$id);
-            return ["error" => false, "message" => "", "data" => $customer];
-        } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Cliente não encontrado"];
-        }
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Customer[]
-     */
-    public function index()
-    {
-        return Customer::with(['addresses', 'shipping'])->get();
-    }
 }

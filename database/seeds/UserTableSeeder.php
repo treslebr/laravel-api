@@ -20,6 +20,14 @@ class UserTableSeeder extends Seeder
             'password' => Hash::make('admin123'),
             'email' => "admin@gmail.com",
             'telephone' => "21971579961",
+            'is_admin' => true,
+        ));
+
+        User::create(array(
+            'name' => 'customer',
+            'password' => Hash::make('customer123'),
+            'email' => "customer@gmail.com",
+            'telephone' => "21971579961",
         ));
     }
 }
