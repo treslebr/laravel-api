@@ -3,94 +3,112 @@
 namespace Tresle\Product\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
+use ErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tresle\Product\Model\Product\Category;
-use Tresle\Product\Http\Requests\ProductCategoriesRequest as Request;
+use \Tresle\Product\Http\Requests\Product\ProductCategoriesRequest;
 
 class CategoryController extends Controller
 {
+    const NAO_ENCONTRADO = "Categoria não encontrada";
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|Category[]
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
      */
     public function index()
     {
-        return $this->getCategoryWith()->get();
-    }
-
-    /**
-     * @param \Tresle\Product\Http\Requests\Product\ProductCategoriesRequest $request
-     * @return mixed
-     */
-    public function store(\Tresle\Product\Http\Requests\Product\ProductCategoriesRequest $request)
-    {
-        $data = $request->all();
-        return Category::create($data);
-    }
-
-    /**
-     * @param $id
-     * @return array
-     */
-    public function show($id)
-    {
         try {
-            $category = $this->getCategoryWith()->findOrFail((int)$id);
-            return ["error" => false, "message" => "", "data" => $category];
-        } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Categoria não encontrada"];
+            return $this->getCategoryWith()->get();
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
-     * @param \Tresle\Product\Http\Requests\Product\ProductCategoriesRequest $request
-     * @param $id
-     * @return array
+     * @param ProductCategoriesRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function update(\Tresle\Product\Http\Requests\Product\ProductCategoriesRequest $request, $id)
+    public function store(ProductCategoriesRequest $request)
+    {
+        try {
+            $data = $request->all();
+            return Category::create($data);
+        } catch (ModelNotFoundException $e) {
+            return response(["errors" => true, "message" => "Não foi possível cadastrar a categoria."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
+        }
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        try {
+            return $this->getCategoryWith()->findOrFail((int)$id);;
+        } catch (ModelNotFoundException $e) {
+            return response(["errors" => true, "message" => self::NAO_ENCONTRADO], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
+        }
+    }
+
+    /**
+     * @param ProductCategoriesRequest $request
+     * @param $id
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function update(ProductCategoriesRequest $request, $id)
     {
         try {
             $category = $this->getCategoryWith()->findOrFail((int)$id);
             $data = $request->all();
             $category->update($data);
-            return ["error" => false, "message" => ""];
+            return ["error" => false, "message" => "Categoria atualizada."];
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Categoria não encontrada"];
+            return response(["errors" => true, "message" => self::NAO_ENCONTRADO], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return array
-     * @throws \Exception
+     * @param $id
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function destroy(\Illuminate\Http\Request $request, $id)
     {
         try {
             $category = Category::findOrFail((int)$id);
             $category->delete();
-            return ["error" => false, "message" => ""];
-        } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Categoria não encontrada"];
-        }catch (\Illuminate\Database\QueryException $e) {
+            return ["error" => false, "message" => "Categoria excluída."];
+        } catch (\Illuminate\Database\QueryException $e) {
             $mensagem = "Erro ao excluir a categoria";
-            $message = strpos($e->getMessage(), "delete") ? "{$mensagem}: Categoria associada a um produto" : $mensagem;
-            return ["error" => true, "message" => $message];
+            $message = strpos($e->getMessage(), "delete") ? "{$mensagem}: Categoria associada a um produto." : $mensagem;
+            return response(["errors" => true, "message" => $message], 422);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
      * @param string $name
-     * @return mixed
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|string
      */
     public function search(string $name)
     {
-        $result = $this->getCategoryWith()->where("name", "like", "%$name%")
-            ->orderBy('name', 'ASC')
-            ->where("status", true)->get()->toJson();
+        try {
+            $result = $this->getCategoryWith()->where("name", "like", "%$name%")
+                ->orderBy('name', 'ASC')
+                ->where("status", true)->get()->toJson();
 
-        return $result;
+            return $result;
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
+        }
     }
 
     /**

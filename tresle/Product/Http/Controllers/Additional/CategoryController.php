@@ -90,7 +90,7 @@ class CategoryController extends Controller
             return response(["errors" => true, "message" => self::NAO_ENCONTRADO], 404);
         } catch (\Illuminate\Database\QueryException $e) {
             $mensagem = "Erro ao excluir a categoria";
-            $message = strpos($e->getMessage(), "delete") ? "{$mensagem}: Categoria associada a um adicional" : $mensagem;
+            $message = strpos($e->getMessage(), "delete") ? "{$mensagem}: Categoria associada a um produto adicional." : $mensagem;
             return response(["errors" => true, "message" => $message], 422);
         } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
