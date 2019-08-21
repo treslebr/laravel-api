@@ -33,7 +33,7 @@ class OrderController extends Controller
     }
 
     /**
-     * @param \Tresle\Cart\Http\Requests\CartRequest $request
+     * @param \Tresle\Order\Http\Requests\OrderRequest $request
      * @param $id
      * @return array
      */
@@ -49,4 +49,86 @@ class OrderController extends Controller
         }
 
     }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function show($id)
+    {
+        try {
+            $order = Order::with("items.additionals")
+                ->findOrFail((int)$id);
+
+            return [
+                "error" => false,
+                "message" => "",
+                "data" => $order
+            ];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Pedido não encontrado."];
+        }
+    }
+
+    /**
+ * @return array
+ */
+    public function index()
+    {
+        try {
+            $order = Order::with("items.additionals")
+                ->get();
+            return [
+                "error" => false,
+                "message" => "",
+                "data" => $order
+            ];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Pedido não encontrado."];
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getOrderCustomerLogged()
+    {
+        try {
+            $user = Auth::user();
+            $order = Order::with("items.additionals")
+                ->where("customer_id", $user->id)
+                ->get();
+            return [
+                "error" => false,
+                "message" => "",
+                "data" => $order
+            ];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Pedido não encontrado."];
+        }
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param $id
+     * @return array
+     */
+    public function getOrderCustomerLoggedById(\Illuminate\Http\Request $request, $id)
+    {
+        try {
+            $user = Auth::user();
+            $order = Order::with("items.additionals")
+                ->where("customer_id", $user->id)
+                ->firstOrFail($id);
+            return [
+                "error" => false,
+                "message" => "",
+                "data" => $order
+            ];
+        } catch (ModelNotFoundException $e) {
+            return ["error" => true, "message" => "Pedido não encontrado."];
+        }
+    }
+
+
 }
