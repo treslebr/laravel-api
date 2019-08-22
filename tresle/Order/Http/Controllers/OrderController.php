@@ -5,18 +5,20 @@ namespace Tresle\Order\Http\Controllers;
 
 
 use App\Http\Controllers\Controller;
+use ErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Tresle\Cart\Model\CartQuery;
 use Tresle\Order\Model\Order;
 use Tresle\Order\Model\OrderQuery;
+use \Tresle\Order\Http\Requests\OrderRequest;
 
 class OrderController extends Controller
 {
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @return array
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function store(\Illuminate\Http\Request $request)
     {
@@ -24,109 +26,93 @@ class OrderController extends Controller
             $user = Auth::user();
             $order = new OrderQuery();
             $newOrder = $order->insert($user->id, new CartQuery(), (int)$request->input("addressId"));
-            return ["error" => false, "message" => "", "data" => $newOrder];
+            return $newOrder;
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Erro ao inserir item no carrinho"];
-        }catch (\Illuminate\Database\QueryException $e) {
-            return ["error" => true, "message" => $e->getMessage()];
+            return response(["errors" => true, "message" => "Não foi possível realizar o pedido."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
-     * @param \Tresle\Order\Http\Requests\OrderRequest $request
+     * @param OrderRequest $request
      * @param $id
-     * @return array
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function update(\Tresle\Order\Http\Requests\OrderRequest $request, $id)
+    public function update(OrderRequest $request, $id)
     {
         try {
             $order = Order::findOrFail((int)$id);
             $data = $request->all();
             $order->update($data);
-            return ["error" => false, "message" => ""];
+            return ["errors" => false, "message" => "Status atualizado."];
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Pedido não encontrado."];
+            return response(["errors" => true, "message" => "Pedido não encontrado."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
 
     }
 
     /**
      * @param $id
-     * @return array
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Http\Response|Order|Order[]
      */
     public function show($id)
     {
         try {
-            $order = Order::with("items.additionals")
+            return Order::with("items.additionals")
                 ->findOrFail((int)$id);
-
-            return [
-                "error" => false,
-                "message" => "",
-                "data" => $order
-            ];
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Pedido não encontrado."];
+            return response(["errors" => true, "message" => "Pedido não encontrado."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
+
     }
 
     /**
- * @return array
- */
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response|Order[]
+     */
     public function index()
     {
         try {
-            $order = Order::with("items.additionals")
+            return Order::with("items.additionals")
                 ->get();
-            return [
-                "error" => false,
-                "message" => "",
-                "data" => $order
-            ];
-        } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Pedido não encontrado."];
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
-     * @return array
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response|Order[]
      */
     public function getOrderCustomerLogged()
     {
         try {
             $user = Auth::user();
-            $order = Order::with("items.additionals")
+            return $order = Order::with("items.additionals")
                 ->where("customer_id", $user->id)
                 ->get();
-            return [
-                "error" => false,
-                "message" => "",
-                "data" => $order
-            ];
-        } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Pedido não encontrado."];
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
      * @param \Illuminate\Http\Request $request
      * @param $id
-     * @return array
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Http\Response|Order|Order[]|null
      */
     public function getOrderCustomerLoggedById(\Illuminate\Http\Request $request, $id)
     {
         try {
             $user = Auth::user();
-            $order = Order::with("items.additionals")
+            return $order = Order::with("items.additionals")
                 ->where("customer_id", $user->id)
-                ->firstOrFail($id);
-            return [
-                "error" => false,
-                "message" => "",
-                "data" => $order
-            ];
-        } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Pedido não encontrado."];
+                ->find($id);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
