@@ -44,7 +44,7 @@ class ProductController extends Controller
      * @param $id
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function destroy(\Illuminate\Http\Request $request, $id)
+    public function destroy(Request $request, $id)
     {
         try {
             $product = Product::findOrFail((int)$id);
@@ -157,7 +157,7 @@ class ProductController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Http\Response
      */
-    public function update(\Tresle\Product\Http\Requests\Product\ProductRequest $request, $id)
+    public function update(ProductRequest $request, $id)
     {
         try {
             $product = $this->getProductsWith()->findOrFail((int)$id);

@@ -5,8 +5,6 @@ namespace Tresle\Cart\Model;
 
 
 use Illuminate\Database\Eloquent\Model;
-use Tresle\Cart\Http\Requests\CartRequest;
-use Tresle\Product\Model\Product\Product;
 
 class Cart extends Model
 {

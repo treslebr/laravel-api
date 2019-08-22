@@ -2,46 +2,41 @@
 
 $version = "v1";
 
-/**
- * Categoria de produtos
- */
-Route::middleware(['auth:api', 'admin'])->prefix("api/{$version}/product/")->group(function() {
-    Route::resource("category", "Product\CategoryController");
-    Route::get("category/q/{name}", "Product\CategoryController@search");
-});
+Route::prefix("api/{$version}/product")->group(function() {
 
-/**
- * Categoria dos produtos adicionais
- */
-Route::prefix("api/{$version}/product/additional/")->group(function() {
-    Route::resource("category", "Additional\CategoryController");
-    Route::get("category/q/{name}", "Additional\CategoryController@search");
-});
+    Route::get("/{id}", "Product\ProductController@show");
+    Route::get("/", "Product\ProductController@index");
+    Route::get("/q/{name}", "Product\ProductController@search");
 
-/**
- * Produtos adicionais
- */
-Route::prefix("api/{$version}/product/")->group(function() {
-    Route::resource("additional", "Additional\AdditionalController");
-    Route::get("additional/q/{name}", "Additional\AdditionalController@search");
-});
+    Route::group([
+        'middleware' => ['auth:api', 'authCustomer']
+    ], function() {
 
-/**
- * Produtos
- */
-Route::prefix("api/{$version}/")->group(function() {
-    Route::resource("product", "Product\ProductController");
-    Route::post("product/{idProduct}/additional", "Product\ProductController@addAdditionalInProductById");
-    Route::delete("product/{idProduct}/additional", "Product\ProductController@removeAdditionalProductById");
-    Route::get("product/q/{name}", "Product\ProductController@search");
-});
+        // Product
+        Route::post("/", "Product\ProductController@store");
+        Route::delete("/{id}", "Product\ProductController@destroy");
+        Route::put("/{id}", "Product\ProductController@update");
+        Route::patch("/{id}", "Product\ProductController@update");
 
-/**
- * Imagem do produto
- */
-Route::prefix("api/{$version}/")->group(function() {
-    Route::post("product/{idProduct}/image", "Product\ImageController@store");
-    Route::delete("product/{idProduct}/image/{idImage}", "Product\ImageController@destroy");
+        Route::post("/{idProduct}/additional", "Product\ProductController@addAdditionalInProductById");
+        Route::delete("/{idProduct}/additional", "Product\ProductController@removeAdditionalProductById");
+
+        // image
+        Route::post("/{idProduct}/image", "Product\ImageController@store");
+        Route::delete("/{idProduct}/image/{idImage}", "Product\ImageController@destroy");
+
+        // Additional
+        Route::resource("/additional", "Additional\AdditionalController");
+        Route::get("/additional/q/{name}", "Additional\AdditionalController@search");
+
+        // Categoria dos produtos adicionais
+        Route::resource("/additional/category", "Additional\CategoryController");
+        Route::get("/additional/category/q/{name}", "Additional\CategoryController@search");
+
+        // Product Category
+        Route::resource("/category", "Product\CategoryController");
+        Route::get("/category/q/{name}", "Product\CategoryController@search");
+    });
 });
 
 Route::fallback(function(){

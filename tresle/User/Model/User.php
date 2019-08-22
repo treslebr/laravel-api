@@ -38,5 +38,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * @var string
+     */
     protected $table = "users";
 }
