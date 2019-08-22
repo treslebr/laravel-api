@@ -29,9 +29,9 @@ class CartController extends Controller
             return $cart;
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => "Não foi possível inserir item no carrinho."], 404);
-        }catch (\Illuminate\Database\QueryException $e) {
+        } catch (\Illuminate\Database\QueryException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
-        }catch (ErrorException $e) {
+        } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
@@ -48,7 +48,7 @@ class CartController extends Controller
             return $items;
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => "Documento não encontrado."], 404);
-        }catch (ErrorException $e) {
+        } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
@@ -67,7 +67,7 @@ class CartController extends Controller
             return ["error" => false, "message" => ""];
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => "Item do carrinho não encontrado."], 404);
-        }catch (ErrorException $e) {
+        } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
@@ -86,7 +86,7 @@ class CartController extends Controller
             return $updated;
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => "Item do carrinho não encontrado."], 404);
-        }catch (ErrorException $e) {
+        } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
