@@ -5,34 +5,34 @@ namespace Tresle\Shipping\Http\Controllers;
 
 
 use App\Http\Controllers\Controller;
+use ErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tresle\Shipping\Model\Shipping;
+use \Tresle\Shipping\Http\Requests\Shipping as ShippingRequest;
 
 class ShippingController extends Controller
 {
 
     /**
-     * @param \Tresle\Shipping\Http\Requests\Shipping $request
-     * @return array
+     * @param ShippingRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function store(\Tresle\Shipping\Http\Requests\Shipping $request)
+    public function store(ShippingRequest $request)
     {
         try {
             $data = $request->all();
-            $shipping = Shipping::create($data);
-            return ["error" => false, "message" => "", "data" => $shipping];
+            return Shipping::create($data);
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Erro ao cadastrar o bairro"];
-        }catch (\Illuminate\Database\QueryException $e) {
-            $mensagem = "Erro ao cadastrar o produto";
-            return ["error" => true, "message" => $mensagem];
+            return response(["errors" => true, "message" => "Não foi possível cadastrar o bairro."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
-     * @param \Tresle\Shipping\Http\Requests\Shipping $request
+     * @param ShippingRequest $request
      * @param $id
-     * @return array
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function update(\Tresle\Shipping\Http\Requests\Shipping $request, $id)
     {
@@ -40,57 +40,60 @@ class ShippingController extends Controller
             $shipping = Shipping::findOrFail((int)$id);
             $data = $request->all();
             $shipping->update($data);
-            return ["error" => false, "message" => ""];
+            return ["errors" => false, "message" => "Frete atualizado com sucesso."];
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Localidade não encontrada."];
+            return response(["errors" => true, "message" => "Localidade não encontrada."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
      * @param $id
-     * @return array
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function show($id)
     {
         try {
-            $shipping = Shipping::findOrFail((int)$id);
-
-            return [
-                "error" => false,
-                "message" => "",
-                "data" => $shipping
-            ];
+            return Shipping::findOrFail((int)$id);
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Localidade não encontrada."];
+            return response(["errors" => true, "message" => "Localidade não encontrada."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
-     * @return mixed
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function index()
     {
-        return Shipping::get();
+        try {
+            return Shipping::get();
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
+        }
     }
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return array
-     * @throws \Exception
+     * @param $id
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function destroy(\Illuminate\Http\Request $request, $id)
     {
         try {
             $shipping = Shipping::findOrFail((int)$id);
             $shipping->delete();
-            return ["error" => false, "message" => ""];
+            return ["errors" => false, "message" => "Frete excluído com sucesso."];
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Localidade não encontrada."];
-        }catch (\Illuminate\Database\QueryException $e) {
+            return response(["errors" => true, "message" => "Localidade não encontrada."], 404);
+        } catch (\Illuminate\Database\QueryException $e) {
             $mensagem = "Erro ao excluir a localidade";
             $message = strpos($e->getMessage(), "delete") ? "{$mensagem}: Localidade associada a um endereço" : $mensagem;
-            return ["error" => true, "message" => $message];
+            return response(["errors" => true, "message" => $message], 422);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
