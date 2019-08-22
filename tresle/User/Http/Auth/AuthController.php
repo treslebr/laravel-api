@@ -5,6 +5,7 @@ namespace Tresle\User\Http\Auth;
 
 
 use Carbon\Carbon;
+use ErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use RuntimeException;
 use Tresle\User\Model\User;
@@ -21,36 +22,42 @@ class AuthController extends \App\Http\Controllers\Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function store(Request $request){
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|confirmed',
-            'telephone' => 'required|string',
-        ]);
-        $user = new User([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'telephone' => $request->telephone,
-            'cellphone' => $request->cellphone,
-            'is_admin' => $this->isAdmin,
-        ]);
-        $user->save();
-        return response()->json([
-            'message' => 'Successfully created user!'
-        ], 201);
+    public function store(Request $request)
+    {
+        try {
+            $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|string|email|unique:users',
+                'password' => 'required|string|confirmed',
+                'telephone' => 'required|string',
+            ]);
+            $user = new User([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'telephone' => $request->telephone,
+                'cellphone' => $request->cellphone,
+                'is_admin' => $this->isAdmin,
+            ]);
+            $user->save();
+            return response()->json([
+                'message' => 'Successfully created user!'
+            ], 201);
+        } catch (ModelNotFoundException $e) {
+            return response(["errors" => true, "message" => "Não foi possível cadastrar usuário."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
+        }
     }
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function login(Request $request)
     {
-
         try {
             $request->validate([
                 'email' => 'required|string|email',
@@ -58,7 +65,7 @@ class AuthController extends \App\Http\Controllers\Controller
                 'remember_me' => 'boolean'
             ]);
             $credentials = request(['email', 'password']);
-            if(!Auth::attempt($credentials))
+            if (!Auth::attempt($credentials))
                 return response()->json([
                     'message' => 'Unauthorized'
                 ], 401);
@@ -76,44 +83,48 @@ class AuthController extends \App\Http\Controllers\Controller
                 )->toDateTimeString(),
                 'is_admin' => $user->is_admin
             ]);
+        } catch (ModelNotFoundException $e) {
+            return response(["errors" => true, "message" => "Usuário não encontrado."], 404);;
+        } catch (RuntimeException $e) {
+            return response(["errors" => true, "message" => "Forbidden"], 403);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
-        catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Erro ao logar"];
-        }catch (RuntimeException $e) {
-                return ["error" => true, "message" => $e->getMessage()];
-            }
-
-
-
-    }
-
-    /**
-     * Get the authenticated User
-     *
-     * @return [json] user object
-     */
-    public function getUserLogged(Request $request)
-    {
-        return response()->json(Auth::user());
     }
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function logout(Request $request)
+    public function getUserLogged(Request $request)
     {
-        $request->user()->token()->revoke();
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ]);
+        try {
+            return response()->json(Auth::user());
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
+        }
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return array
-     * @throws \Exception
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        try {
+            $request->user()->token()->revoke();
+            return response()->json([
+                'message' => 'Successfully logged out'
+            ]);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function destroy(\Illuminate\Http\Request $request, $id)
     {
@@ -122,10 +133,12 @@ class AuthController extends \App\Http\Controllers\Controller
             $user->delete();
             return ["error" => false, "message" => ""];
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => self::NAO_ENCONTRADO];
-        }catch (\Illuminate\Database\QueryException $e) {
-            $mensagem = "Erro ao excluir o usuário";
-            return ["error" => true, "message" => $mensagem];
+            return response(["errors" => true, "message" => "Usuário não encontrado."], 404);
+        } catch (\Illuminate\Database\QueryException $e) {
+            $mensagem = "Não foi possível excluir o usuário.";
+            return response(["errors" => true, "message" => $mensagem], 422);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 }

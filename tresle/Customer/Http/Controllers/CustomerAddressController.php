@@ -4,82 +4,65 @@
 namespace Tresle\Customer\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use ErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \Tresle\Customer\Http\Requests\CustomerAddressRequest;
 use Tresle\Customer\Model\Address\Address;
-use Tresle\Customer\Model\Customer\Customer;
+use Tresle\Customer\Model\Address\AddressQuery;
 use Tresle\User\Model\User;
 
-class CustomerAddressController  extends Controller
+class CustomerAddressController extends Controller
 {
     /**
      * @param CustomerAddressRequest $request
      * @param $idCustomer
-     * @return array
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|Address
      */
     public function store(CustomerAddressRequest $request, $idCustomer)
     {
         try {
             $customer = User::findOrFail((int)$idCustomer);
-
-            $address = $this->createAddressByRequest($request, (int)$idCustomer);
-
-            return ["error" => false, "message" => "", "data" => $address];
+            $addressQuery = new AddressQuery();
+            $address = $addressQuery->createAddressByRequest($request, (int)$idCustomer);
+            return $address;
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Erro ao cadastrar o endereço"];
-        }catch (\Illuminate\Database\QueryException $e) {
+            return response(["errors" => true, "message" => "Não foi possível cadastrar o endereço."], 404);
+        } catch (\Illuminate\Database\QueryException $e) {
             $mensagem = "Erro ao cadastrar o endereço";
             $message = strpos($e->getMessage(), "a foreign key constraint fails") ? "{$mensagem}: Cliente não encontrada" : $mensagem;
-            return ["error" => true, "message" => $e->getMessage()];
+            return response(["errors" => true, "message" => $message], 422);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
      * @param CustomerAddressRequest $request
-     * @return array
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|Address
      */
-    public function addAddressCustomerLogged(CustomerAddressRequest $request){
+    public function addAddressCustomerLogged(CustomerAddressRequest $request)
+    {
         try {
             $customerAuth = Auth::user();
             $customer = User::findOrFail($customerAuth->id);
-
-            $address = $this->createAddressByRequest($request, $customerAuth->id);
-
-            return ["error" => false, "message" => "", "data" => $address];
+            $addressQuery = new AddressQuery();
+            $address = $addressQuery->createAddressByRequest($request, $customerAuth->id);
+            return $address;
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Erro ao cadastrar o endereço"];
-        }catch (\Illuminate\Database\QueryException $e) {
+            return response(["errors" => true, "message" => "Não foi possível cadastrar o endereço."], 404);
+        } catch (\Illuminate\Database\QueryException $e) {
             $mensagem = "Erro ao cadastrar o endereço";
-            $message = strpos($e->getMessage(), "a foreign key constraint fails") ? "{$mensagem}: Cliente não encontrada" : $mensagem;
-            return ["error" => true, "message" => $e->getMessage()];
+            $message = strpos($e->getMessage(), "a foreign key constraint fails") ? "{$mensagem}: Cliente não encontrado." : $mensagem;
+            return response(["errors" => true, "message" => $message], 422);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
-     * @param CustomerAddressRequest $request
-     * @param $idCustomer
-     * @return Address
-     */
-    private function createAddressByRequest(CustomerAddressRequest $request, $idCustomer){
-        $address = new Address();
-        $address->postcode     = $request->input("postcode");
-        $address->country      = $request->input("country");
-        $address->state        = $request->input("state");
-        $address->city         = $request->input("city");
-        $address->region       = $request->input("region");
-        $address->street_1     = $request->input("street_1");
-        $address->street_2     = $request->input("street_2");
-        $address->street_3     = $request->input("street_3");
-        $address->shipping_id  = $request->input("shipping_id");
-        $address->customer_id  = (int)$idCustomer;
-        $address->save();
-        return $address;
-    }
-
-    /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param $idCustomer
      * @param $idAddress
      * @return array
@@ -93,7 +76,7 @@ class CustomerAddressController  extends Controller
      * @param CustomerAddressRequest $request
      * @param $idCustomer
      * @param $idAddress
-     * @return array
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function update(CustomerAddressRequest $request, $idCustomer, $idAddress)
     {
@@ -103,7 +86,7 @@ class CustomerAddressController  extends Controller
     /**
      * @param CustomerAddressRequest $request
      * @param $idAddress
-     * @return array
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function updateAddressCustomerLogged(CustomerAddressRequest $request, $idAddress)
     {
@@ -115,7 +98,7 @@ class CustomerAddressController  extends Controller
      * @param CustomerAddressRequest $request
      * @param $idCustomer
      * @param $idAddress
-     * @return array
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function updateAction(CustomerAddressRequest $request, $idCustomer, $idAddress)
     {
@@ -126,14 +109,16 @@ class CustomerAddressController  extends Controller
 
             $data = $request->all();
             $address->update($data);
-            return ["error" => false, "message" => Address::where('id', (int)$idAddress)->get()];
+            return Address::where('id', (int)$idAddress)->get();
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Endereço não encontrado"];
+            return response(["errors" => true, "message" => "Endereço não encontrado."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param $idAddress
      * @return array
      */
@@ -148,17 +133,17 @@ class CustomerAddressController  extends Controller
      * @param $idAddress
      * @return array
      */
-    private function delete($idCustomer, $idAddress){
+    private function delete($idCustomer, $idAddress)
+    {
         try {
             $address = Address::where('customer_id', (int)$idCustomer)
                 ->where('id', (int)$idAddress)
                 ->delete();
-            return ["error" => false, "message" => ""];
+            return ["errors" => false, "message" => "Excluído com sucesso."];
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Categoria não encontrada"];
-        }catch (\Illuminate\Database\QueryException $e) {
-            $mensagem = "Erro ao excluir o endereço";
-            return ["error" => true, "message" => $mensagem];
+            return response(["errors" => true, "message" => "Endereço não encontrado."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 

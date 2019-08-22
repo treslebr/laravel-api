@@ -5,34 +5,39 @@ namespace Tresle\Cart\Http\Controllers;
 
 
 use App\Http\Controllers\Controller;
+use ErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Tresle\Cart\Model\Cart;
 use Tresle\Cart\Model\CartQuery;
+use \Tresle\Cart\Http\Requests\CartRequest;
+use \Illuminate\Http\Request;
 
 class CartController extends Controller
 {
 
     /**
-     * @param \Tresle\Cart\Http\Requests\CartRequest $request
-     * @return array
+     * @param CartRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|CartQuery
      */
-    public function store(\Tresle\Cart\Http\Requests\CartRequest $request)
+    public function store(CartRequest $request)
     {
         try {
             $user = Auth::user();
             $cart = new CartQuery();
             $cart->insert($request, $user->id);
-            return ["error" => false, "message" => "", "data" => $cart];
+            return $cart;
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Erro ao inserir item no carrinho"];
-        }catch (\Illuminate\Database\QueryException $e) {
-            return ["error" => true, "message" => "Erro no banco de dados"];
+            return response(["errors" => true, "message" => "Não foi possível inserir item no carrinho."], 404);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
-     * @return array
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|mixed
      */
     public function index()
     {
@@ -40,20 +45,20 @@ class CartController extends Controller
             $user = Auth::user();
             $cart = new CartQuery();
             $items = $cart->getCartItemsByCustomerId($user->id);
-            return ["error" => false, "message" => "", "data" => $items];
+            return $items;
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Erro ao inserir item no carrinho"];
-        }catch (\Illuminate\Database\QueryException $e) {
-            return ["error" => true, "message" => $e->getMessage()];
+            return response(["errors" => true, "message" => "Documento não encontrado."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param $id
-     * @return array
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function destroy(\Illuminate\Http\Request $request, $id)
+    public function destroy(Request $request, $id)
     {
         try {
             $user = Auth::user();
@@ -61,28 +66,28 @@ class CartController extends Controller
             $cart->delete();
             return ["error" => false, "message" => ""];
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Item do carrinho não encontrado."];
+            return response(["errors" => true, "message" => "Item do carrinho não encontrado."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
     /**
-     * @param \Tresle\Cart\Http\Requests\CartRequest $request
+     * @param CartRequest $request
      * @param $id
-     * @return array
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|mixed
      */
-    public function update(\Tresle\Cart\Http\Requests\CartRequest $request, $id)
+    public function update(CartRequest $request, $id)
     {
         try {
             $user = Auth::user();
             $cart = new CartQuery();
             $updated = $cart->updatePatch($request, $user->id, $id);
-
-            return ["error" => false, "message" => "", "data" => $updated];
+            return $updated;
         } catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Item não encontrado"];
-        }catch (\Illuminate\Database\QueryException $e) {
-            $mensagem = "Erro ao atualizar o item";
-            return ["error" => true, "message" => $mensagem];
+            return response(["errors" => true, "message" => "Item do carrinho não encontrado."], 404);
+        } catch (ErrorException $e) {
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
     }
 
