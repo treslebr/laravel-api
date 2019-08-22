@@ -29,6 +29,9 @@ class Order extends Model
         );
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function items(){
         return $this->hasMany('\Tresle\Order\Model\OrderItem');
     }
