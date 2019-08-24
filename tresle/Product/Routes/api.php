@@ -3,13 +3,8 @@
 $version = "v1";
 
 Route::prefix("api/{$version}/product")->group(function() {
-
-    Route::get("/{id}", "Product\ProductController@show");
-    Route::get("/", "Product\ProductController@index");
-    Route::get("/q/{name}", "Product\ProductController@search");
-
     Route::group([
-        'middleware' => ['auth:api', 'authCustomer']
+        'middleware' => ['auth:api', 'admin']
     ], function() {
 
         // Product
@@ -29,14 +24,22 @@ Route::prefix("api/{$version}/product")->group(function() {
         Route::resource("/additional", "Additional\AdditionalController");
         Route::get("/additional/q/{name}", "Additional\AdditionalController@search");
 
-        // Categoria dos produtos adicionais
+         // Categoria dos produtos adicionais
         Route::resource("/additional/category", "Additional\CategoryController");
         Route::get("/additional/category/q/{name}", "Additional\CategoryController@search");
 
-        // Product Category
-        Route::resource("/category", "Product\CategoryController");
+         // Product Category
+        Route::get("/category", "Product\CategoryController@index");
+        Route::get("/category/{id1}", "Product\CategoryController@show");
+        Route::delete("/category", "Product\CategoryController@destroy");
+        Route::put("/category", "Product\CategoryController@update");
+        Route::patch("/category", "Product\CategoryController@update");
         Route::get("/category/q/{name}", "Product\CategoryController@search");
     });
+
+    Route::get("/{id}", "Product\ProductController@show");
+    Route::get("/", "Product\ProductController@index");
+    Route::get("/q/{name}", "Product\ProductController@search");
 });
 
 Route::fallback(function(){
