@@ -63,10 +63,12 @@ class ProductController extends Controller
     public function removeAdditionalProductById(Request $request, $idProduct){
         $idProduct  = (int)$idProduct;
         try {
+            $additionalsId = $request->input("additionalsId");
+            if(!$additionalsId)
+                return response(["errors" => true, "message" => "O campo additionalsId é obrigatório."], 422);
             /** @var \Tresle\Product\Model\Product\Product $product */
             $product  = $this->getProductsWith()->findOrFail($idProduct);
-            $product->additionals()->detach($request->input("additionalsId"));
-
+            $product->additionals()->detach($additionalsId);
             return $this->getProductsWith()->findOrFail($idProduct);
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => self::NAO_ENCONTRADO], 404);
@@ -94,7 +96,7 @@ class ProductController extends Controller
 
             $product->additionals()->attach($additionalsId);
 
-            return $this->getProductsWith()->findOrFail($idProduct);
+            return response($this->getProductsWith()->findOrFail($idProduct), 201);
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => self::NAO_ENCONTRADO], 404);
         }catch (\Illuminate\Database\QueryException $e) {
