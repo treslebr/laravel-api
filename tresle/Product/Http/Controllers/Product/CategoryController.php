@@ -90,7 +90,9 @@ class CategoryController extends Controller
             $category = Category::findOrFail((int)$id);
             $category->delete();
             return ["error" => false, "message" => "Categoria excluída."];
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (ModelNotFoundException $e) {
+            return response(["errors" => true, "message" => self::NAO_ENCONTRADO], 404);
+        }catch (\Illuminate\Database\QueryException $e) {
             $mensagem = "Erro ao excluir a categoria";
             $message = strpos($e->getMessage(), "delete") ? "{$mensagem}: Categoria associada a um produto." : $mensagem;
             return response(["errors" => true, "message" => $message], 422);

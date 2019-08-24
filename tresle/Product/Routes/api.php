@@ -31,8 +31,8 @@ Route::prefix("api/{$version}/product")->group(function() {
          // Product Category
         Route::get("/category", "Product\CategoryController@index");
         Route::post("/category", "Product\CategoryController@store");
-        Route::get("/category/{id1}", "Product\CategoryController@show");
-        Route::delete("/category", "Product\CategoryController@destroy");
+        Route::get("/category/{id}", "Product\CategoryController@show");
+        Route::delete("/category/{id}", "Product\CategoryController@destroy");
         Route::put("/category/{id}", "Product\CategoryController@update");
         Route::patch("/category/{id}", "Product\CategoryController@update");
         Route::get("/category/q/{name}", "Product\CategoryController@search");
