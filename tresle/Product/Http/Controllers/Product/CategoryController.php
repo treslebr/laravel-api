@@ -18,7 +18,12 @@ class CategoryController extends Controller
     public function index()
     {
         try {
-            return $this->getCategoryWith()->get();
+            $result = $this->getCategoryWith()->get();
+            if($result){
+                return $result;
+            }else{
+                return response(["errors" => true, "message" => "Categoria não encontrada."], 404);
+            }
         } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
@@ -47,7 +52,7 @@ class CategoryController extends Controller
     public function show($id)
     {
         try {
-            return $this->getCategoryWith()->findOrFail((int)$id);;
+            return $this->getCategoryWith()->findOrFail((int)$id);
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => self::NAO_ENCONTRADO], 404);
         } catch (ErrorException $e) {
