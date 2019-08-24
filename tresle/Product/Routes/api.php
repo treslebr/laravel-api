@@ -30,6 +30,7 @@ Route::prefix("api/{$version}/product")->group(function() {
 
          // Product Category
         Route::get("/category", "Product\CategoryController@index");
+        Route::post("/category", "Product\CategoryController@store");
         Route::get("/category/{id1}", "Product\CategoryController@show");
         Route::delete("/category", "Product\CategoryController@destroy");
         Route::put("/category", "Product\CategoryController@update");
