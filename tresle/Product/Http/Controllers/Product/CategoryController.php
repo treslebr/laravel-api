@@ -103,9 +103,14 @@ class CategoryController extends Controller
         try {
             $result = $this->getCategoryWith()->where("name", "like", "%$name%")
                 ->orderBy('name', 'ASC')
-                ->where("status", true)->get()->toJson();
+                ->where("status", true)->get()
+                ->toArray();
+            if($result){
+                return $result;
+            }else{
+                return response(["errors" => true, "message" => "Categoria não encontrada."], 404);
+            }
 
-            return $result;
         } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
