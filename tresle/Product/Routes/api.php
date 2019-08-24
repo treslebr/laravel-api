@@ -34,7 +34,7 @@ Route::prefix("api/{$version}/product")->group(function() {
         Route::get("/category/{id1}", "Product\CategoryController@show");
         Route::delete("/category", "Product\CategoryController@destroy");
         Route::put("/category/{id}", "Product\CategoryController@update");
-        Route::patch("/category", "Product\CategoryController@update");
+        Route::patch("/category/{id}", "Product\CategoryController@update");
         Route::get("/category/q/{name}", "Product\CategoryController@search");
     });
 
