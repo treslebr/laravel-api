@@ -146,9 +146,15 @@ class ProductController extends Controller
             $result = Product::where("name", "like", "%$name%")
                 ->orderBy('name', 'ASC')
                 ->with($this->with)
-                ->where("status", true)->get();
+                ->where("status", true)
+                ->get()
+                ->toArray();
 
-            return $result;
+            if($result){
+                return $result;
+            }else{
+                return response(["errors" => true, "message" => "Nenhum produto cadastrado."], 404);
+            }
         } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
