@@ -35,11 +35,11 @@ class ProductRequest extends FormRequest
                 $rules["product_category_id"]  .= "|required";
                 break;
             case "PUT": // ATUALIZAÇÃO DE UM REGISTRO EXISTENTE
-                $rules["name"]    .= "|required|unique:product,name,".$this->product;
+                $rules["name"]    .= "|required|unique:product,name,".$this->id;
                 $rules["product_category_id"]  .= "|required";
                 break;
             case "PATCH": // ATUALIZAÇÃO DE UM REGISTRO EXISTENTE
-                $rules["name"]    .= "|filled|unique:product,name,".$this->product;
+                $rules["name"]    .= "|filled|unique:product,name,".$this->id;
                 $rules["product_category_id"]  .= "|filled";
                 break;
             default:break;
