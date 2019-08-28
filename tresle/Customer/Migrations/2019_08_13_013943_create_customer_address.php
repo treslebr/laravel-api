@@ -19,7 +19,6 @@ class CreateCustomerAddress extends Migration
             $table->string('country');
             $table->string('state');
             $table->string('city');
-            $table->string('region');
             $table->string('street_1');
             $table->string('street_2');
             $table->string('street_3')->nullable();

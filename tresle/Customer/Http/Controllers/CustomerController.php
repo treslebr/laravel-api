@@ -57,7 +57,9 @@ class CustomerController extends \Tresle\User\Http\Auth\AuthController
     public function show(Request $request, $id)
     {
         try {
-            return Customer::with('addresses.shipping')->findOrFail((int)$id);;
+            return Customer::with('addresses.shipping')
+                ->where("is_admin", 0)
+                ->findOrFail((int)$id);
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => "Cliente não encontrado."], 404);
         } catch (ErrorException $e) {
@@ -71,7 +73,15 @@ class CustomerController extends \Tresle\User\Http\Auth\AuthController
     public function index()
     {
         try {
-            return Customer::with('addresses.shipping')->get();;
+           $result = Customer::with('addresses.shipping')
+               ->where("is_admin", 0)
+               ->get()
+               ->toArray();
+           if($result){
+               return $result;
+           }else{
+               return response(["errors" => true, "message" => "Cliente não encontrado."], 404);
+           }
         } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }

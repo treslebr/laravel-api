@@ -18,7 +18,12 @@ class CategoryController extends Controller
     public function index()
     {
         try {
-            return $this->getCategoryWith()->get();
+            $result = $this->getCategoryWith()->get();
+            if($result){
+                return $result;
+            }else{
+                return response(["errors" => true, "message" => "Categoria não encontrada."], 404);
+            }
         } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
@@ -47,7 +52,7 @@ class CategoryController extends Controller
     public function show($id)
     {
         try {
-            return $this->getCategoryWith()->findOrFail((int)$id);;
+            return $this->getCategoryWith()->findOrFail((int)$id);
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => self::NAO_ENCONTRADO], 404);
         } catch (ErrorException $e) {
@@ -85,7 +90,9 @@ class CategoryController extends Controller
             $category = Category::findOrFail((int)$id);
             $category->delete();
             return ["error" => false, "message" => "Categoria excluída."];
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (ModelNotFoundException $e) {
+            return response(["errors" => true, "message" => self::NAO_ENCONTRADO], 404);
+        }catch (\Illuminate\Database\QueryException $e) {
             $mensagem = "Erro ao excluir a categoria";
             $message = strpos($e->getMessage(), "delete") ? "{$mensagem}: Categoria associada a um produto." : $mensagem;
             return response(["errors" => true, "message" => $message], 422);
@@ -103,9 +110,14 @@ class CategoryController extends Controller
         try {
             $result = $this->getCategoryWith()->where("name", "like", "%$name%")
                 ->orderBy('name', 'ASC')
-                ->where("status", true)->get()->toJson();
+                ->where("status", true)->get()
+                ->toArray();
+            if($result){
+                return $result;
+            }else{
+                return response(["errors" => true, "message" => "Categoria não encontrada."], 404);
+            }
 
-            return $result;
         } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }

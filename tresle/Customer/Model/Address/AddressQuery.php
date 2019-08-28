@@ -19,7 +19,6 @@ class AddressQuery
         $address->country      = $request->input("country");
         $address->state        = $request->input("state");
         $address->city         = $request->input("city");
-        $address->region       = $request->input("region");
         $address->street_1     = $request->input("street_1");
         $address->street_2     = $request->input("street_2");
         $address->street_3     = $request->input("street_3");

@@ -15,7 +15,6 @@ class Address extends Model
         "country",
         "state",
         "city",
-        "region",
         "street_1",
         "street_2",
         "street_3",

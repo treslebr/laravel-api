@@ -22,6 +22,10 @@ class OrderQuery
         try {
             $items = $cart->getCartItemsByCustomerId($customerId);
 
+            if($items->isEmpty()){
+                return response(["errors" => true, "message" => "Carrinho vazio."], 404);
+            }
+
             $customerAdress = Address::with("shipping")
                 ->where("id", $addressId)
                 ->where("customer_id", $customerId)
@@ -35,7 +39,6 @@ class OrderQuery
             $order->country = $customerAdress->country;
             $order->state = $customerAdress->state;
             $order->city = $customerAdress->city;
-            $order->region = $customerAdress->region;
             $order->street_1 = $customerAdress->street_1;
             $order->street_2 = $customerAdress->street_2;
             $order->street_3 = $customerAdress->street_3;
@@ -63,13 +66,15 @@ class OrderQuery
 
             Cart::where("customer_id", $customerId)->delete();
             \DB::commit(); //validar as transações
-        } catch (\Exception $e) {
-            \DB::rollback(); //reverter tudo, caso tenha acontecido algum erro.
-            return ["error" => true, "message" => "Erro no banco de dados1"];
+            return response(["errors" => true, "message" => "Pedido realizado com sucesso."], 201);
         }catch (ModelNotFoundException $e) {
-            return ["error" => true, "message" => "Erro no banco de dados2"];
+            return response(["errors" => true, "message" => "Endereço não encontrado."], 404);
+        }catch (\Exception $e) {
+            \DB::rollback(); //reverter tudo, caso tenha acontecido algum erro.
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }catch (\Illuminate\Database\QueryException $e) {
-            return ["error" => true, "message" => "Erro no banco de dados3"];
+            \DB::rollback(); //reverter tudo, caso tenha acontecido algum erro.
+            return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
 
     }

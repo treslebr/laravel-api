@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Tresle\Product\Model\Product\Image;
 use Tresle\Product\Model\Product\Product;
-\Tresle\Product\Http\Requests\Product\ImageRequest;
+use \Tresle\Product\Http\Requests\Product\ImageRequest;
 
 class ImageController extends Controller
 {
@@ -34,7 +34,7 @@ class ImageController extends Controller
             $imagem->product_id = $idProduct;
 
             $imagem->save();
-            return $imagem;
+            return response(["errors" => false, "id" => $imagem->id, "message" => "Imagem cadastrada com sucesso."], 201);
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => "Produto não encontrado."], 404);
         }catch (\Illuminate\Database\QueryException $e) {

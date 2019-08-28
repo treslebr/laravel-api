@@ -38,7 +38,10 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:60,1',
+            /**
+             * @todo Tresle: Comentei essa funcionalidade pois estava dando erro 429 no teste automatizado no postman.
+             */
+//            'throttle:60,1',
             'bindings',
         ],
     ];

@@ -104,11 +104,17 @@ class CategoryController extends Controller
     public function search(string $name)
     {
         try {
-            $result = Category::where("name", "like", "%$name%")
+            $result = Category::with("additionals")
+                ->where("name", "like", "%$name%")
                 ->orderBy('name', 'ASC')
-                ->where("status", true)->get()->toJson();
-
-            return $result;
+                ->where("status", true)
+                ->get()
+                ->toArray();
+            if($result){
+                return $result;
+            }else{
+                return response(["errors" => true, "message" => "Categoria não encontrada."], 404);
+            }
         } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }

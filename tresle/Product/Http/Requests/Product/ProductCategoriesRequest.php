@@ -31,10 +31,10 @@ class ProductCategoriesRequest extends FormRequest
                 $rules["name"]    .= "|required|unique:product_categories";
                 break;
             case "PUT": // ATUALIZAÇÃO DE UM REGISTRO EXISTENTE
-                $rules["name"]    .= "|required|unique:product_categories,name,".$this->category;
+                $rules["name"]    .= "|required|unique:product_categories,name,".$this->id;
                 break;
             case "PATCH":
-                $rules["name"]    .= "|filled|unique:product_categories,name,".$this->category;
+                $rules["name"]    .= "|filled|unique:product_categories,name,".$this->id;
                 break;
             default:break;
         }

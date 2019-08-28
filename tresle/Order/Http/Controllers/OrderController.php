@@ -94,6 +94,8 @@ class OrderController extends Controller
             return $order = Order::with("items.additionals")
                 ->where("customer_id", $user->id)
                 ->get();
+        }catch (ModelNotFoundException $e) {
+            return response(["errors" => true, "message" => "Pedido não encontrado."], 404);
         } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }
@@ -110,7 +112,9 @@ class OrderController extends Controller
             $user = Auth::user();
             return $order = Order::with("items.additionals")
                 ->where("customer_id", $user->id)
-                ->find($id);
+                ->findOrFail($id);
+        }catch (ModelNotFoundException $e) {
+            return response(["errors" => true, "message" => "Pedido não encontrado."], 404);
         } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }

@@ -30,7 +30,6 @@ class CustomerAddressRequest  extends FormRequest
             'country'     => "min:2|max:190|",
             'state'       => "min:2|max:190|",
             'city'        => "min:2|max:190|",
-            'region'      => "min:2|max:190|",
             'street_1'    => "min:2|max:190|",
             'street_2'    => "min:2|max:190|",
             'street_3'    => "min:2|max:190|",
@@ -43,7 +42,6 @@ class CustomerAddressRequest  extends FormRequest
                 $rules['country']   .= "filled";
                 $rules['state']     .= "filled";
                 $rules['city']      .= "filled";
-                $rules['region']    .= "filled";
                 $rules['street_1']  .= "filled";
                 $rules['street_2']  .= "filled";
                 $rules['shipping_id']  .= "filled";
@@ -53,7 +51,6 @@ class CustomerAddressRequest  extends FormRequest
                 $rules['country']   .= "required";
                 $rules['state']     .= "required";
                 $rules['city']      .= "required";
-                $rules['region']    .= "required";
                 $rules['street_1']  .= "required";
                 $rules['street_2']  .= "required";
                 $rules['shipping_id']  .= "required";
@@ -74,7 +71,6 @@ class CustomerAddressRequest  extends FormRequest
             'country'     => "trim",
             'state'       => "trim",
             'city'        => "trim",
-            'region'      => "trim",
             'street_1'    => "trim",
             'street_2'    => "trim",
             'street_3'    => "trim",
