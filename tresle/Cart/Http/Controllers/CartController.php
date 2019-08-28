@@ -26,7 +26,7 @@ class CartController extends Controller
             $user = Auth::user();
             $cart = new CartQuery();
             $cart->insert($request, $user->id);
-            return $cart;
+            return response(["errors" => true, "message" => "OK"], 201);
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => "Não foi possível inserir item no carrinho."], 404);
         } catch (\Illuminate\Database\QueryException $e) {
@@ -64,7 +64,7 @@ class CartController extends Controller
             $user = Auth::user();
             $cart = Cart::where('customer_id', $user->id)->findOrFail((int)$id);
             $cart->delete();
-            return ["error" => false, "message" => ""];
+            return ["error" => false, "message" => "Item excluído com sucesso."];
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => "Item do carrinho não encontrado."], 404);
         } catch (ErrorException $e) {

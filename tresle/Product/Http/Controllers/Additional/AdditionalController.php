@@ -49,7 +49,7 @@ class AdditionalController extends Controller
     public function show($id)
     {
         try {
-            return Additional::with(["category", "products"])->findOrFail($id);;
+            return Additional::with(["category", "products"])->findOrFail($id);
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => self::NAO_ENCONTRADO], 404);
         }catch (ErrorException $e) {
@@ -108,9 +108,15 @@ class AdditionalController extends Controller
             $result = Additional::where("name", "like", "%$name%")
                 ->orderBy('name', 'ASC')
                 ->with("category")
-                ->where("status", true)->get();
+                ->where("status", true)
+                ->get()
+                ->toArray();
+            if($result){
+                return $result;
+            }else{
+                return response(["errors" => true, "message" => "Produto adicional não encontrado."], 404);
+            }
 
-            return $result;
         } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
         }

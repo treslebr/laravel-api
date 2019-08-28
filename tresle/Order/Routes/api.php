@@ -18,11 +18,3 @@ Route::prefix("api/{$version}/order")->group(function() {
     });
 });
 
-Route::prefix("api/{$version}/customer/order")->group(function() {
-    Route::group([
-        'middleware' => ['auth:api', 'authCustomer']
-    ], function() {
-        Route::get('/', '\Tresle\Order\Http\Controllers\OrderController@getOrderCustomerLogged');
-        Route::get('/{id}', '\Tresle\Order\Http\Controllers\OrderController@getOrderCustomerLoggedById');
-    });
-});

@@ -2,6 +2,15 @@
 
 $version = "v1";
 
+Route::prefix("api/{$version}/customer/order")->group(function() {
+    Route::group([
+        'middleware' => ['auth:api', 'authCustomer']
+    ], function() {
+        Route::get('/', '\Tresle\Order\Http\Controllers\OrderController@getOrderCustomerLogged');
+        Route::get('/{id}', '\Tresle\Order\Http\Controllers\OrderController@getOrderCustomerLoggedById');
+    });
+});
+
 Route::prefix("api/{$version}/customer")->group(function() {
     Route::post("/", "\Tresle\Customer\Http\Controllers\CustomerController@store");
     Route::post("/login", "\Tresle\User\Http\Auth\AuthController@login");

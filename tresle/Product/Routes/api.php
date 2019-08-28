@@ -20,13 +20,13 @@ Route::prefix("api/{$version}/product")->group(function() {
         Route::post("/{idProduct}/image", "Product\ImageController@store");
         Route::delete("/{idProduct}/image/{idImage}", "Product\ImageController@destroy");
 
-        // Additional
-        Route::resource("/additional", "Additional\AdditionalController");
-        Route::get("/additional/q/{name}", "Additional\AdditionalController@search");
-
          // Categoria dos produtos adicionais
         Route::resource("/additional/category", "Additional\CategoryController");
         Route::get("/additional/category/q/{name}", "Additional\CategoryController@search");
+
+        // Additional
+        Route::resource("/additional", "Additional\AdditionalController");
+        Route::get("/additional/q/{name}", "Additional\AdditionalController@search");
 
          // Product Category
         Route::get("/category", "Product\CategoryController@index");

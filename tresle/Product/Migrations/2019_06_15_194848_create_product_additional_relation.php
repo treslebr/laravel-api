@@ -15,10 +15,16 @@ class CreateProductAdditionalRelation extends Migration
     {
         Schema::create('product_additional_relation', function (Blueprint $table) {
             $table->bigInteger("product_id")->unsigned();
-            $table->foreign("product_id", "product_prod_foreign")->references('id')->on("product");
+            $table->foreign("product_id", "product_prod_foreign")
+                ->references('id')
+                ->on("product")
+                ->onDelete('cascade');
 
             $table->bigInteger("product_additional_id")->unsigned();
-            $table->foreign("product_additional_id", "product_add_foreign")->references('id')->on("product_additional");
+            $table->foreign("product_additional_id", "product_add_foreign")
+                ->references('id')
+                ->on("product_additional")
+                ->onDelete('cascade');;
 
             $table->timestamps();
 
