@@ -6,6 +6,8 @@ Tresle API
 Instalação
 ----------
 
+OBS: Para a execução do projeto é necessário que tenho instalado, mysql, php 7.3 e composer. 
+
  1) Baixar a última versão: [https://github.com/treslebr/laravel-api/releases](https://github.com/treslebr/laravel-api/releases)
  2) Descompactar o projeto.
  3) Acessar o projeto pelo terminal. 
@@ -34,3 +36,28 @@ Executar no terminal:
 10) `php artisan key:generate`
 11) `php artisan passport:install`
 12) `php artisan serve`
+
+Utilizando a API no Postman
+=============
+
+1) **Importar o ambiente:** [Ambiente de desenvolvimento](https://github.com/treslebr/api-doc-swagger/blob/master/postman/Desenvolvimento.postman_environment.json)
+2) **Importar as coleções:**
+ -  [Cliente](https://github.com/treslebr/api-doc-swagger/blob/master/postman/Sistema%20-%20Cliente.postman_collection.json)
+ -  [Administrador](https://github.com/treslebr/api-doc-swagger/blob/master/postman/Sitemas%20-%20Admin.postman_collection.json)
+
+Principais funcionalidades
+=============
+| Funcionalidades       | Pull Request |
+|-----------------------|--------------|
+| Categoria do produto     |#[1](https://github.com/treslebr/laravel-api/pull/1)              |
+| Categoria dos produtos adicionais   | #[2](https://github.com/treslebr/laravel-api/pull/2)          |
+| Produtos adicionais       | #[10](https://github.com/treslebr/laravel-api/pull/10)          |
+| Produto | #[11](https://github.com/treslebr/laravel-api/pull/11)           |
+| Autenticação de usuário  | #[16](https://github.com/treslebr/laravel-api/pull/16)          |
+| Clientes   | #[18](https://github.com/treslebr/laravel-api/pull/18)          |
+| Endereços do cliente                 | #[20](https://github.com/treslebr/laravel-api/pull/20)          |
+| Frete                 | #[24](https://github.com/treslebr/laravel-api/pull/24)          |
+| Carrinho de compras                 | #[26](https://github.com/treslebr/laravel-api/pull/26)          |
+| Pedidos                 | #[28](https://github.com/treslebr/laravel-api/pull/28)          |
+
+**Mais Pull Requests finalizados:**  [Clique aqui](https://github.com/treslebr/laravel-api/pulls?q=is%3Apr+is%3Aclosed)
