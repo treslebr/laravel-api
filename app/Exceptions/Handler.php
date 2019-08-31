@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -27,10 +29,9 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Report or log an exception.
-     *
-     * @param  \Exception  $exception
-     * @return void
+     * @param Exception $exception
+     * @return mixed|void
+     * @throws Exception
      */
     public function report(Exception $exception)
     {
@@ -38,14 +39,32 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param Exception $e
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Exception $e)
     {
-        return parent::render($request, $exception);
+        // Not found exception handler
+        if($e instanceof NotFoundHttpException) {
+            return response()->json([
+                'error' => [
+                    'description' => 'Invalid URI',
+                    'messages' => []
+                ]
+            ], 404);
+        }
+
+        // Method not allowed exception handler
+        if($e instanceof MethodNotAllowedHttpException) {
+            return response()->json([
+                'error' => [
+                    'description' => 'Method Not Allowed',
+                    'messages' => []
+                ]
+            ], 405);
+        }
+
+        return parent::render($request, $e);
     }
 }

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @todo Tresle Como que passar essa configuração para o pacote
+ */
+
 return [
 
     /*
@@ -42,8 +46,14 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'passport',
             'provider' => 'users',
+            'hash' => false,
+        ],
+
+        'customer' => [
+            'driver' => 'passport',
+            'provider' => 'customers',
             'hash' => false,
         ],
     ],
@@ -70,6 +80,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
+        'customers' => [
+            'driver' => 'eloquent',
+            'model' => \Tresle\Customer\Model\Customer\Customer::class,
+        ],
 
         // 'users' => [
         //     'driver' => 'database',
@@ -95,6 +109,11 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        'customers' => [
+            'provider' => 'customers',
             'table' => 'password_resets',
             'expire' => 60,
         ],
