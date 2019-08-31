@@ -6,7 +6,7 @@ Tresle API
 Instalação
 ----------
 
-OBS: Para a execução do projeto é necessário que tenho instalado, mysql, php 7.3 e composer. 
+OBS: Para a execução do projeto é necessário que tenha instalado, mysql, php 7.3 e composer. 
 
  1) Baixar a última versão: [https://github.com/treslebr/laravel-api/releases](https://github.com/treslebr/laravel-api/releases)
  2) Descompactar o projeto.
