@@ -114,7 +114,9 @@ class ProductController extends Controller
     public function index()
     {
         try {
-            $products = $this->getProductsWith()->get();
+            $products = $this->getProductsWith()
+                ->where("status", true)
+                ->get();
             return $products;
         } catch (ErrorException $e) {
             return response(["errors" => true, "message" => "Erro no servidor."], 500);
