@@ -174,6 +174,7 @@ return [
         Tresle\Shipping\Providers\ShippingServiceProvider::class,
         Tresle\Cart\Providers\CartServiceProvider::class,
         Tresle\Order\Providers\OrderServiceProvider::class,
+        Tresle\Mocky\Providers\MockyServiceProvider::class,
 
         /*
          * Application Service Providers...
