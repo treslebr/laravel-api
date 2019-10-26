@@ -3,7 +3,7 @@
 
 $version = "v1";
 
-Route::prefix("api/{$version}/cart")->group(function() {
+Route::prefix("api/{$version}/carts")->group(function() {
     Route::group([
         'middleware' => ['auth:api', 'authCustomer']
     ], function() {
