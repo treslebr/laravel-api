@@ -13,20 +13,20 @@ Route::prefix("api/{$version}/products")->group(function() {
         Route::put("/{id}", "Product\ProductController@update");
         Route::patch("/{id}", "Product\ProductController@update");
 
-        Route::post("/{idProduct}/additional", "Product\ProductController@addAdditionalInProductById");
-        Route::delete("/{idProduct}/additional", "Product\ProductController@removeAdditionalProductById");
+        Route::post("/{idProduct}/additionals", "Product\ProductController@addAdditionalInProductById");
+        Route::delete("/{idProduct}/additionals", "Product\ProductController@removeAdditionalProductById");
 
         // image
-        Route::post("/{idProduct}/image", "Product\ImageController@store");
-        Route::delete("/{idProduct}/image/{idImage}", "Product\ImageController@destroy");
+        Route::post("/{idProduct}/images", "Product\ImageController@store");
+        Route::delete("/{idProduct}/images/{idImage}", "Product\ImageController@destroy");
 
          // Categoria dos produtos adicionais
-        Route::resource("/additional/category", "Additional\CategoryController");
-        Route::get("/additional/category/q/{name}", "Additional\CategoryController@search");
+        Route::resource("/additionals/categories", "Additional\CategoryController");
+        Route::get("/additionals/categories/q/{name}", "Additional\CategoryController@search");
 
         // Additional
-        Route::resource("/additional", "Additional\AdditionalController");
-        Route::get("/additional/q/{name}", "Additional\AdditionalController@search");
+        Route::resource("/additionals", "Additional\AdditionalController");
+        Route::get("/additionals/q/{name}", "Additional\AdditionalController@search");
 
          // Product Category
         Route::get("/categories", "Product\CategoryController@index");
@@ -44,5 +44,11 @@ Route::prefix("api/{$version}/products")->group(function() {
 });
 
 Route::fallback(function(){
-    return response()->json(['message' => 'Not Found!'], 404);
+    return response()->json(
+        [
+            'message' => 'Not Found',
+            "errors" => ""
+        ]
+        , 404
+    );
 });
