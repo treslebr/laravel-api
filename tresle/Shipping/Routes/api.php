@@ -2,7 +2,7 @@
 
 $version = "v1";
 
-Route::prefix("api/{$version}/shipping")->group(function() {
+Route::prefix("api/{$version}/shippings")->group(function() {
     Route::get('/', '\Tresle\Shipping\Http\Controllers\ShippingController@index');
     Route::group([
         'middleware' => ['auth:api', 'admin']
