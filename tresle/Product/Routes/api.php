@@ -2,7 +2,7 @@
 
 $version = "v1";
 
-Route::prefix("api/{$version}/product")->group(function() {
+Route::prefix("api/{$version}/products")->group(function() {
     Route::group([
         'middleware' => ['auth:api', 'admin']
     ], function() {
@@ -29,13 +29,13 @@ Route::prefix("api/{$version}/product")->group(function() {
         Route::get("/additional/q/{name}", "Additional\AdditionalController@search");
 
          // Product Category
-        Route::get("/category", "Product\CategoryController@index");
-        Route::post("/category", "Product\CategoryController@store");
-        Route::get("/category/{id}", "Product\CategoryController@show");
-        Route::delete("/category/{id}", "Product\CategoryController@destroy");
-        Route::put("/category/{id}", "Product\CategoryController@update");
-        Route::patch("/category/{id}", "Product\CategoryController@update");
-        Route::get("/category/q/{name}", "Product\CategoryController@search");
+        Route::get("/categories", "Product\CategoryController@index");
+        Route::post("/categories", "Product\CategoryController@store");
+        Route::get("/categories/{id}", "Product\CategoryController@show");
+        Route::delete("/categories/{id}", "Product\CategoryController@destroy");
+        Route::put("/categories/{id}", "Product\CategoryController@update");
+        Route::patch("/categories/{id}", "Product\CategoryController@update");
+        Route::get("/categories/q/{name}", "Product\CategoryController@search");
     });
 
     Route::get("/{id}", "Product\ProductController@show");

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use ErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use RuntimeException;
+use Tresle\User\Http\Requests\UserRequest;
 use Tresle\User\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,22 +54,19 @@ class AuthController extends \App\Http\Controllers\Controller
     }
 
     /**
-     * @param Request $request
+     * @param UserRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function login(Request $request)
+    public function login(UserRequest $request)
     {
         try {
-            $request->validate([
-                'email' => 'required|string|email',
-                'password' => 'required|string',
-                'remember_me' => 'boolean'
-            ]);
             $credentials = request(['email', 'password']);
-            if (!Auth::attempt($credentials))
+
+            if (!Auth::attempt($credentials)) {
                 return response()->json([
                     'message' => 'Unauthorized'
                 ], 401);
+            }
             $user = $request->user();
             $tokenResult = $user->createToken('Personal Access Token');
             $token = $tokenResult->token;

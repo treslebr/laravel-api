@@ -2,7 +2,7 @@
 
 $version = "v1";
 
-Route::prefix("api/{$version}/user")->group(function() {
+Route::prefix("api/{$version}/users")->group(function() {
     Route::post("/login", "\Tresle\User\Http\Auth\AuthController@login");
 
     Route::group([
