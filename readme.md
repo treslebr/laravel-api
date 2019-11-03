@@ -40,7 +40,7 @@ Executar no terminal:
 Utilizando a API no Postman
 =============
 
-[Acessar](https://github.com/treslebr/postman)
+[Clique aqui !!!](https://github.com/treslebr/postman)
 
 Principais funcionalidades
 =============
