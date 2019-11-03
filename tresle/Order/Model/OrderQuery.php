@@ -66,9 +66,9 @@ class OrderQuery
 
             Cart::where("customer_id", $customerId)->delete();
             \DB::commit(); //validar as transações
-            return response(["errors" => true, "message" => "Pedido realizado com sucesso."], 201);
+            return response(["errors" => false, "message" => "Pedido realizado com sucesso."], 201);
         }catch (ModelNotFoundException $e) {
-            return response(["errors" => true, "message" => "Endereço não encontrado."], 404);
+            return response(["errors" => true, "message" => "Endereço não encontrado."], 422);
         }catch (\Exception $e) {
             \DB::rollback(); //reverter tudo, caso tenha acontecido algum erro.
             return response(["errors" => true, "message" => "Erro no servidor."], 500);

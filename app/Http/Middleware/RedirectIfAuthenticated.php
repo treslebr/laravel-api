@@ -24,8 +24,12 @@ class RedirectIfAuthenticated
         /**
          * @todo Tresle
          */
-        return response()->json([
-            'message' => 'Unauthorized'
-        ], 401);
+        return response()->json(
+            [
+                'message' => 'Unauthorized',
+                "errors" => ""
+            ],
+            401
+        );
     }
 }

@@ -109,7 +109,7 @@ class CustomerAddressController extends Controller
 
             $data = $request->all();
             $address->update($data);
-            return Address::where('id', (int)$idAddress)->get();
+            return Address::where('id', (int)$idAddress)->get()->first();
         } catch (ModelNotFoundException $e) {
             return response(["errors" => true, "message" => "Endereço não encontrado."], 404);
         } catch (ErrorException $e) {
