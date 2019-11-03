@@ -40,10 +40,7 @@ Executar no terminal:
 Utilizando a API no Postman
 =============
 
-1) **Importar o ambiente:** [Ambiente de desenvolvimento](https://raw.githubusercontent.com/treslebr/api-doc-swagger/master/postman/Desenvolvimento.postman_environment.json)
-2) **Importar as coleções:**
- -  [Cliente](https://raw.githubusercontent.com/treslebr/api-doc-swagger/master/postman/desenvolvimento/Sistema%20-%20Cliente.postman_collection.json)
- -  [Administrador](https://raw.githubusercontent.com/treslebr/api-doc-swagger/master/postman/desenvolvimento/Sitemas%20-%20Admin.postman_collection.json)
+[Acessar](https://github.com/treslebr/postman)
 
 Principais funcionalidades
 =============
