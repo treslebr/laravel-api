@@ -2,7 +2,7 @@
 
 $version = "v1";
 
-Route::prefix("api/{$version}/customer/order")->group(function() {
+Route::prefix("api/{$version}/customers/orders")->group(function() {
     Route::group([
         'middleware' => ['auth:api', 'authCustomer']
     ], function() {
@@ -11,7 +11,7 @@ Route::prefix("api/{$version}/customer/order")->group(function() {
     });
 });
 
-Route::prefix("api/{$version}/customer")->group(function() {
+Route::prefix("api/{$version}/customers")->group(function() {
     Route::post("/", "\Tresle\Customer\Http\Controllers\CustomerController@store");
     Route::post("/login", "\Tresle\User\Http\Auth\AuthController@login");
 
@@ -31,7 +31,7 @@ Route::prefix("api/{$version}/customer")->group(function() {
 
 });
 
-Route::prefix("api/{$version}/customer/{idCustomer}/address")->group(function() {
+Route::prefix("api/{$version}/customers/{idCustomer}/addresses")->group(function() {
     Route::group([
         'middleware' => ['auth:api', 'admin']
     ], function() {
@@ -42,7 +42,7 @@ Route::prefix("api/{$version}/customer/{idCustomer}/address")->group(function() 
     });
 });
 
-Route::prefix("api/{$version}/customer/address")->group(function() {
+Route::prefix("api/{$version}/customers/addresses")->group(function() {
     Route::group([
         'middleware' => ['auth:api', 'authCustomer']
     ], function() {

@@ -19,9 +19,13 @@ class AuthCustomer
         if(auth()->user()->is_admin == 0){
             return $next($request);
         }
-        return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
+        return response()->json(
+            [
+                'message' => 'Unauthorized',
+                "errors" => ""
+            ],
+            401
+        );
     }
 
 }

@@ -16,6 +16,9 @@ class Product extends Model
      */
     protected $table = "product";
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function additionals(){
         return $this->belongsToMany(
             "Tresle\Product\Model\Additional\Additional",
