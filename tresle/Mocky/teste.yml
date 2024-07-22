@@ -1,0 +1,53 @@
+openapi: 3.0.0
+info: 
+  title: API.Produto
+  description: >-
+    API responsável por informar detalhes dos produtos e coberturas comercializadas pela
+    Mongeral Aegon e parcerias. Os produtos comercializados estão principalmente relacionados às
+    vendas de seguros e previdências, e por isso possuem parâmetros relativos a essas características atuariais e legais.
+  version: 1.0.0
+  termsOfService: http://swagger.io/terms/
+  
+servers: 
+  - url: "http://127.0.0.1:8000/api/v1"
+    description: Sandbox
+
+
+paths:
+  '/product':
+    get:
+      tags:
+        - Produtos e Coberturas
+          
+      summary: Retorna informações dos fundos de um produto de previdência
+      responses:
+        '200':
+          description: lista de fundos disponíveis para o produto
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    nome:
+                      type: string
+                      example: MONGERAL AEGON PRIVATE RF CONSERVADOR
+                    sigla:
+                      type: string
+                      example: MAITRF00
+        "404":
+          description: Produto não encontrado.
+        "500":
+          description: Erro não identificado
+          
+    
+  
+components:
+
+  securitySchemes:
+    bearerAuth:         
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
